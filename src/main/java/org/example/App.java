@@ -1,5 +1,7 @@
 package org.example;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,11 +15,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 public class App extends Application {
 
     private int remainingSeconds = 0;
     private boolean isRunning = false;
+    private boolean wasPaused = false;
 
     private Text timeDisplay;
     private TextField hoursInput;
@@ -25,6 +34,7 @@ public class App extends Application {
     private Button startButton;
     private Button pauseButton;
     private Button resetButton;
+    private Timeline timer;
 
     @Override
     public void start(Stage primaryStage) {
@@ -58,6 +68,11 @@ public class App extends Application {
 
         pauseButton.setDisable(true);
 
+        startButton.setOnAction(e -> startB());
+        pauseButton.setOnAction(e -> pauseB());
+        resetButton.setOnAction(e -> resetB());
+
+
         // Layout för knapppar
         HBox buttonBox = new HBox(10, startButton, pauseButton, resetButton);
         buttonBox.setAlignment(Pos.CENTER);
@@ -85,4 +100,106 @@ public class App extends Application {
         button.setPrefWidth(80);
         return button;
     }
+
+    private void startB() {
+        System.out.println("Start-knappen klickades!");
+        if (isRunning) return; // Om timern redan körs, gör inget
+        if (wasPaused){
+
+        }
+
+        try {
+            if (!wasPaused){
+                int hours = Integer.parseInt(hoursInput.getText().isEmpty() ? "0" : hoursInput.getText());
+                int minutes = Integer.parseInt(minutesInput.getText().isEmpty() ? "0" : minutesInput.getText());
+                remainingSeconds = (hours * 3600) + (minutes * 60);
+            }
+
+            if (remainingSeconds <= 0) {
+                timeDisplay.setText("Invalid input");
+                return;
+            }
+
+            isRunning = true;
+            startButton.setDisable(true); // Inaktivera Start-knappen när timern startar
+            pauseButton.setDisable(false); // Aktivera Pause-knappen
+
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateTimer()));
+            timer.setCycleCount(Timeline.INDEFINITE); // Kör tills vi stoppar den
+            timer.play();
+
+        } catch (NumberFormatException e) {
+            timeDisplay.setText("Invalid input");
+        }
+    }
+
+
+    private void pauseB() {
+        System.out.println("Pause-knappen klickades!");
+        if (isRunning) {
+            timer.stop();
+            isRunning = false;
+            startButton.setDisable(false); // Tillåter att starta om timern
+            wasPaused = true;
+        }
+    }
+
+    private void resetB() {
+        System.out.println("Restore-knappen klickades!");
+        if (timer != null) {
+            timer.stop();
+        }
+        isRunning = false;
+        remainingSeconds = 0;
+        timeDisplay.setText("00:00:00");
+        startButton.setDisable(false);
+        pauseButton.setDisable(true);
+        wasPaused = false;
+    }
+
+    private void updateTimer() {
+        if (remainingSeconds > 0) {
+            remainingSeconds--;
+            int hours = remainingSeconds / 3600;
+            int minutes = (remainingSeconds % 3600) / 60;
+            int seconds = remainingSeconds % 60;
+            timeDisplay.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+        } else {
+            timer.stop();
+            isRunning = false;
+            startButton.setDisable(false); // Återaktivera Start-knappen när timern är slut
+            pauseButton.setDisable(true); // Inaktivera Pause-knappen
+            wasPaused = false;
+            timeDisplay.setText("Time's up!");
+            alarm();
+        }
+    }
+
+    private void alarm(){
+        String fileName = "alarm.wav";
+
+        try {
+            URL soundURL = App.class.getResource("/sound/" + fileName);
+            if (soundURL == null) {
+                System.err.println("Ljudfilen hittades inte!");
+                return;
+            }
+
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundURL);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+
+            // Vänta tills ljudet är klart
+            while (clip.isRunning()) {
+                Thread.sleep(100);
+            }
+
+            clip.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
