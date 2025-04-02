@@ -18,8 +18,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 public class App extends Application {
@@ -176,24 +178,22 @@ public class App extends Application {
     }
 
     private void alarm(){
-        String fileName = "alarm.wav";
 
+        String fileName = "/sound/alarm.wav"; // Anpassa efter var filen ligger
         try {
-            URL soundURL = App.class.getResource("/sound/" + fileName);
-            if (soundURL == null) {
+            InputStream inputStream = App.class.getResourceAsStream(fileName);
+            if (inputStream == null) {
                 System.err.println("Ljudfilen hittades inte!");
                 return;
             }
 
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundURL);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(inputStream));
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
             clip.start();
 
             // Vänta tills ljudet är klart
-            while (clip.isRunning()) {
-                Thread.sleep(100);
-            }
+            Thread.sleep(clip.getMicrosecondLength() / 1000);
 
             clip.close();
         } catch (Exception e) {
