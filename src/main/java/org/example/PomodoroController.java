@@ -1,9 +1,11 @@
 package org.example;
 
-import javafx.application.Platform;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class PomodoroController {
     @FXML private Label timerLabel;
@@ -11,19 +13,19 @@ public class PomodoroController {
     @FXML private ToggleButton focusButton, shortBreakButton, longBreakButton;
     @FXML private MenuButton menuButton;
 
-    private timerTask timer;
+    private Timeline timeline; // timeline för javafx
     private boolean running = false;
     private String mode = "FOCUS";
+    private int timeLeft;
 
-    private int timeLeft; // Tiden som är kvar (i sekunder)
-    private final int focusTime = 25; // Fokus tid i minuter
-    private final int shortBreakTime = 5; // Kort paus tid i minuter
-    private final int longBreakTime = 15; // Lång paus tid i minuter
+    private final int focusTime = 25 * 60;    // 25 minuter i sekunder
+    private final int shortBreakTime = 5 * 60;  // 5 minuter i sekunder
+    private final int longBreakTime = 15 * 60;  // 15 minuter i sekunder
 
     @FXML
     public void initialize() {
         setupMenu();
-        setFocus(); // Standardläge
+        setFocus(); // Default läge
     }
 
     private void setupMenu() {
@@ -39,21 +41,6 @@ public class PomodoroController {
         menuButton.getItems().addAll(settingsItem, aboutItem, new SeparatorMenuItem(), exitItem);
     }
 
-    private void openSettings() {
-        // implemnteras senare
-    }
-
-    private void showAbout() {
-        // implementeras senare
-        // kan använda alert här
-        // eller joption
-    }
-
-    private void exitApplication() {
-        Stage stage = (Stage) menuButton.getScene().getWindow();
-        stage.close();
-    }
-
     private void updateDisplay() {
         int min = timeLeft / 60;
         int sec = timeLeft % 60;
@@ -63,42 +50,62 @@ public class PomodoroController {
     @FXML
     private void startStop() {
         if (running) {
-            if (timer != null) {
-                timer.stopTimer();
-                timeLeft = timer.getTimeLeft();
-            }
-            startButton.setText("START");
-            running = false;
+            pauseTimer();
         } else {
-            startButton.setText("PAUSE");
-            running = true;
+            startTimer();
+        }
+    }
 
-            timer = new timerTask(timeLeft,
-                    this::updateDisplay,
-                    () -> {
+    private void startTimer() {
+        if (timeline != null) {
+            timeline.stop();
+        }
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft <= 0) {
+                        timeline.stop();
                         running = false;
                         startButton.setText("START");
-                    });
+                    }
+                })
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
 
-            timer.start();
+        running = true;
+        startButton.setText("PAUSE");
+    }
+
+    private void pauseTimer() {
+        if (timeline != null) {
+            timeline.stop();
         }
+        running = false;
+        startButton.setText("START");
     }
 
     @FXML
     private void reset() {
-        if (timer != null) timer.stopTimer(); // Stoppa pågående timer
-        running = false;
-        startButton.setText("START");
-
-        if (mode.equals("FOCUS")) {
-            timeLeft = focusTime * 60;
-        } else if (mode.equals("SHORT BREAK")) {
-            timeLeft = shortBreakTime * 60;
-        } else {
-            timeLeft = longBreakTime * 60;
-        }
-
+        pauseTimer();
+        setInitialTime();
         updateDisplay();
+    }
+
+    private void setInitialTime() {
+        switch (mode) {
+            case "FOCUS":
+                timeLeft = focusTime;
+                break;
+            case "SHORT BREAK":
+                timeLeft = shortBreakTime;
+                break;
+            case "LONG BREAK":
+                timeLeft = longBreakTime;
+                break;
+        }
     }
 
     @FXML
@@ -126,5 +133,18 @@ public class PomodoroController {
         shortBreakButton.setSelected(false);
         longBreakButton.setSelected(true);
         reset();
+    }
+
+    private void openSettings() {
+        // Implementera senare
+    }
+
+    private void showAbout() {
+        // Implementer senare
+    }
+
+    private void exitApplication() {
+        Stage stage = (Stage) menuButton.getScene().getWindow();
+        stage.close();
     }
 }
