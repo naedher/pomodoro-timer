@@ -92,9 +92,17 @@ public class App extends Application {
 
     private void LoginAction() {
         System.out.println("LoginAction");
+
+        String email = EmailField.getText();
+        String password = PasswordField.getText();
+
+        LoginController loginController = new LoginController();
+        loginController.sendLoginRequest(email, password);
+
         newApp newApp = new newApp();
         newApp.showTimer();
     }
+
 
     private void GuestmodeAction() {
         System.out.println("GuestmodeAction");
@@ -107,4 +115,6 @@ public class App extends Application {
 
     }
 
-}
+    }
+
+
