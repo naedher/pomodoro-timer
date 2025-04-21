@@ -9,7 +9,7 @@ public class Settings {
     public void show() {
         Stage stage = new Stage(); // Nytt fönster
 
-        Label label = new Label("Hej från det nya fönstret!");
+        Label label = new Label("Settings");
         StackPane root = new StackPane(label);
         Scene scene = new Scene(root, 250, 150);
 

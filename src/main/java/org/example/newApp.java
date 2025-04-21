@@ -32,6 +32,7 @@ public class newApp {
     private Button startButton;
     private Button pauseButton;
     private Button resetButton;
+    private Button settingsButton;
     private Timeline timer;
 
     public void showTimer() {
@@ -62,16 +63,18 @@ public class newApp {
         startButton = createStyledButton("Start", "#4CAF50");
         pauseButton = createStyledButton("Pause", "#FFC107");
         resetButton = createStyledButton("Restore", "#f44336");
+        settingsButton = createStyledButton("Settings", "#f44336");
 
         pauseButton.setDisable(true);
 
         startButton.setOnAction(e -> startB());
         pauseButton.setOnAction(e -> pauseB());
         resetButton.setOnAction(e -> resetB());
+        settingsButton.setOnAction(e -> settingsB());
 
 
         // Layout för knapppar
-        HBox buttonBox = new HBox(10, startButton, pauseButton, resetButton);
+        HBox buttonBox = new HBox(10, startButton, pauseButton, resetButton, settingsButton);
         buttonBox.setAlignment(Pos.CENTER);
 
         // Huvudlayout
@@ -140,6 +143,11 @@ public class newApp {
         }
     }
 
+    private void settingsB() {
+        Settings newWindow = new Settings(); // Skapa det nya fönstret
+        newWindow.show();
+    }
+
     private void resetB() {
         System.out.println("Restore-knappen klickades!");
         if (timer != null) {
@@ -152,8 +160,6 @@ public class newApp {
         pauseButton.setDisable(true);
         wasPaused = false;
 
-        Settings newWindow = new Settings(); // Skapa det nya fönstret
-        newWindow.show();
 
     }
 
