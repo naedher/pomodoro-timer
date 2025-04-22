@@ -3,6 +3,7 @@ package org.example;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -64,8 +65,40 @@ public class LoginScene {
     }
 
     private void loginAction() {
-        System.out.println("Login attempted with email: " + emailField.getText());
+        String email = emailField.getText();
+        String password = passwordField.getText();
+
+        // Felhantering för mail
+        if (!isValidEmail(email)) {
+            showAlert("Invalid Email", "Please enter a valid email address.");
+            return;
+        }
+
+        // Felhantering för lösenord
+        // Felhantering för stor bokstav, specialtecken, etc kan vi lägga till senare
+        if (password.length() < 8) {
+            showAlert("Invalid Password", "Password must be at least 8 characters long");
+            return;
+        }
         mainApp.timerScene();
+    }
+
+    private boolean isValidEmail(String email) {
+        String[] validDomains = {"@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@icloud.com"};
+        for (String domain : validDomains) {
+            if (email.toLowerCase().endsWith(domain)) { // Kolla om email slutar med giltig domän
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void guestModeAction() {
