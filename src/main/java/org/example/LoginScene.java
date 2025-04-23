@@ -1,5 +1,6 @@
 package org.example;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,6 +16,8 @@ public class LoginScene {
     private Main mainApp;
     private TextField emailField;
     private TextField passwordField;
+    private final LoginController loginController = new LoginController();
+
 
     public LoginScene(Main mainApp) {
         this.mainApp = mainApp;
@@ -80,6 +83,18 @@ public class LoginScene {
             showAlert("Invalid Password", "Password must be at least 8 characters long");
             return;
         }
+        loginController.sendLoginRequest(email, password)
+                .thenAccept(token -> {
+                     Platform.runLater(() -> mainApp.timerScene());
+                })
+                .exceptionally(ex -> {
+
+                    Platform.runLater(() ->
+                            showAlert("Login Failed", ex.getMessage())
+                    );
+                    return null;
+                });
+
         mainApp.timerScene();
     }
 
