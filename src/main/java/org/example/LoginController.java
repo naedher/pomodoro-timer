@@ -29,13 +29,23 @@ public class LoginController {
 
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(resp -> {
+
+                    System.out.println("Status code: " + resp.statusCode());
+                    System.out.println("Response body: " + resp.body());
+
                     int status = resp.statusCode();
                     if (status != 200) {
                         throw new RuntimeException("Login failed: HTTP " + status);
                     }
+
                     JSONObject obj = new JSONObject(resp.body());
                     return obj.getString("token");
+                })
+                .exceptionally(e -> {
+
+                    System.out.println("Problem with request: " + e.getMessage());
+
+                    return null;
                 });
     }
 }
-
