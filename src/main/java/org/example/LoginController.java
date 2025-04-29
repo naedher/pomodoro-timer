@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public class LoginController {
     private final HttpClient client = HttpClient.newHttpClient();
-    private final String loginUrl = "http://localhost:8081/api/auth/login";
+    private final String loginUrl = "https://pomodoro-timer.koyeb.app/api/auth/login";
 
     public CompletableFuture<String> sendLoginRequest(String email, String password) {
         String jsonBody = String.format("""
