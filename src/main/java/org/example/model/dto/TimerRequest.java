@@ -1,4 +1,4 @@
-package org.example.api;
+package org.example.model.dto;
 
 public class TimerRequest {
     private String name;
@@ -12,16 +12,36 @@ public class TimerRequest {
         this.breakDuration = breakDuration;
         this.pomodoroCount = pomodoroCount;
     }
+
     public String getName() {
         return name;
     }
+
     public int getWorkDuration() {
         return workDuration;
     }
+
     public int getBreakDuration() {
         return breakDuration;
     }
+
     public int getPomodoroCount() {
         return pomodoroCount;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWorkDuration(int workDuration) {
+        this.workDuration = workDuration;
+    }
+
+    public void setBreakDuration(int breakDuration) {
+        this.breakDuration = breakDuration;
+    }
+
+    public void setPomodoroCount(int pomodoroCount) {
+        this.pomodoroCount = pomodoroCount;
     }
 }

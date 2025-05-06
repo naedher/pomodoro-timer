@@ -1,4 +1,4 @@
-package org.example.api;
+package org.example.model.dto;
 
 import java.time.LocalDateTime;
 
@@ -11,23 +11,16 @@ public class TimerDetails {
     private Integer breakDuration;
     private Integer pomodoroCount;
 
-    public TimerDetails(Long id,
-                        String name,
-                        LocalDateTime createdAt,
-                        LocalDateTime updatedAt,
-                        Integer workDuration,
-                        Integer breakDuration,
-                        Integer pomodoroCount) {
+    // Default constructor needed for JSON deserialization
+    public TimerDetails() {}
+
+    public TimerDetails(Long id, String name, Integer workDuration, Integer breakDuration, Integer pomodoroCount) {
         this.id = id;
         this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.workDuration = workDuration;
         this.breakDuration = breakDuration;
         this.pomodoroCount = pomodoroCount;
     }
-
-    public TimerDetails() {}
 
     public Long getId() {
         return id;
