@@ -1,9 +1,9 @@
 package org.example.model.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.infrastructure.ApiClient;
-import org.example.model.dto.LoginRequest;
-import org.example.model.dto.RegisterRequest;
+import org.example.model.dto.AuthRequest;
 import org.example.model.service.AuthService;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,9 +18,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public CompletableFuture<String> login(String email, String password) {
-        LoginRequest request = new LoginRequest(email, password);
-        return apiClient.post("/auth/login", request, String.class)
+    public CompletableFuture<String> login(AuthRequest authRequest) throws JsonProcessingException {
+        String jsonBody = mapper.writeValueAsString(authRequest);
+        return apiClient.post("/api/auth/login", jsonBody)
                 .thenApply(response -> {
                     try {
                         return mapper.readTree(response).get("token").asText();
@@ -31,9 +31,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public CompletableFuture<String> register(String email, String password) {
-        RegisterRequest request = new RegisterRequest(email, password);
-        return apiClient.post("/auth/register", request, String.class)
+    public CompletableFuture<String> register(AuthRequest authRequest) throws JsonProcessingException {
+        String jsonBody = mapper.writeValueAsString(authRequest);
+        return apiClient.post("/api/auth/register", jsonBody)
                 .thenApply(response -> {
                     try {
                         return mapper.readTree(response).get("token").asText();
