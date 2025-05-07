@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.demo.api.Api;
 import org.example.demo.exception.BadRequestException;
 import org.example.demo.exception.UnauthorizedException;
+import org.example.demo.model.TimerDetails;
+
+import java.util.concurrent.CompletableFuture;
 
 public class RequestDemoService {
 
@@ -22,5 +25,13 @@ public class RequestDemoService {
 
         // Set the token in the application context for future use
         AppContext.getInstance().setAuthToken(token);
+    }
+
+    public CompletableFuture<TimerDetails> getTimerAsync(int id) {
+        // TODO: Transform to domain specific exceptions here
+
+        return api.getTimer(id);
+
+
     }
 }
