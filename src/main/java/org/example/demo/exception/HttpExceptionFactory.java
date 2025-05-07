@@ -26,4 +26,12 @@ public class HttpExceptionFactory {
         }
         return exceptionMap.get(statusCode).apply(message);
     }
+
+    public static Function<String, HttpException> httpExceptionFunction(int statusCode) {
+        if (!exceptionMap.containsKey(statusCode)) {
+            throw new RuntimeException("Unexpected error");
+        }
+
+        return exceptionMap.get(statusCode);
+    }
 }
