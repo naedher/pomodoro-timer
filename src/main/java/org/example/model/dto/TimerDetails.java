@@ -12,7 +12,7 @@ public class TimerDetails {
     private Integer pomodoroCount;
 
     // Default constructor needed for JSON deserialization
-    public TimerDetails() {}
+    public TimerDetails() { }
 
     public TimerDetails(Long id, String name, Integer workDuration, Integer breakDuration, Integer pomodoroCount) {
         this.id = id;

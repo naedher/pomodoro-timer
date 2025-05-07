@@ -13,6 +13,8 @@ public class TimerRequest {
         this.pomodoroCount = pomodoroCount;
     }
 
+    public TimerRequest() { }
+
     public String getName() {
         return name;
     }
