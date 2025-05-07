@@ -1,6 +1,6 @@
 package org.example.demo.exception;
 
-public class HttpException extends Exception {
+public class HttpException extends RuntimeException {
     public HttpException(String message) {
         super(message);
     }
