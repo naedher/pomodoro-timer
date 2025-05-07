@@ -1,6 +1,9 @@
 package org.example.demo.api;
 
-import org.example.demo.exception.*;
+import org.example.demo.AppContext;
+import org.example.demo.exception.HttpException;
+import org.example.demo.exception.HttpExceptionFactory;
+import org.example.demo.exception.NetworkException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -8,6 +11,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 public class Connection {
@@ -47,5 +51,31 @@ public class Connection {
         } catch (IOException | InterruptedException e) { // connection failed, or other IO error
             throw new NetworkException("Failed to connect to server", e);
         }
+    }
+
+
+    public CompletableFuture<String> getAsyncAuth(String path) throws HttpException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(baseUrl.resolve(path))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + AppContext.getInstance().getAuthToken())
+                .GET()
+                .build();
+
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                        return response.body();
+                    }
+
+                    JSONObject responseJson = new JSONObject(response.body());
+                    String errMsg = responseJson.getString("error");
+
+                    logger.severe("HTTP error " + response.statusCode() + ": " + response.body());
+                    throw HttpExceptionFactory.httpExceptionFunction(response.statusCode())
+                            .apply(errMsg);
+                });
+
+
     }
 }
