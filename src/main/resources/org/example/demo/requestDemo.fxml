@@ -7,12 +7,17 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.RequestDemoController">
    <children>
-      <Button fx:id="loginButton" layoutX="257.0" layoutY="218.0" mnemonicParsing="false" onAction="#login" text="Login" />
-      <Text layoutX="266.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="login" />
-      <TextField fx:id="emailField" layoutX="205.0" layoutY="119.0" />
-      <Text layoutX="205.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
-      <Text layoutX="208.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-      <TextField fx:id="passwordField" layoutX="205.0" layoutY="173.0" />
-      <Text fx:id="logText" layoutX="268.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Button fx:id="loginButton" layoutX="93.0" layoutY="200.0" mnemonicParsing="false" onAction="#login" text="Login" />
+      <Text layoutX="89.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="login" />
+      <TextField fx:id="emailField" layoutX="51.0" layoutY="104.0" />
+      <Text layoutX="51.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+      <Text layoutX="51.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <TextField fx:id="passwordField" layoutX="51.0" layoutY="160.0" />
+      <Text fx:id="logText" layoutX="101.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <TextField fx:id="selectedTimer" layoutX="350.0" layoutY="104.0" />
+      <Text layoutX="350.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer Id" />
+      <Text layoutX="408.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Get timer" />
+      <Button fx:id="getTimerButton" layoutX="399.0" layoutY="173.0" mnemonicParsing="false" onAction="#getTimerAsync" text="Get" />
+      <Text fx:id="timerText" layoutX="212.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
    </children>
 </AnchorPane>
