@@ -40,7 +40,7 @@ public class Connection {
         try {
             // Send request, get response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) { // Successful
+            if (response.statusCode() >= 200 && response.statusCode() < 300) { // Successful
                 // Return the response body as a JSON object
                 return new JSONObject(response.body());
             }
