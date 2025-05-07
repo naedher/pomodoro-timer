@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.demo.exception.BadRequestException;
 import org.example.demo.exception.UnauthorizedException;
 import org.example.demo.LoginRequest;
+import org.example.demo.model.TimerDetails;
 import org.json.JSONObject;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 public class Api {
 
@@ -31,5 +35,16 @@ public class Api {
         } catch (Exception e) { // Unexpected error
             throw new RuntimeException(e);
         }
+    }
+
+    public CompletableFuture<TimerDetails> getTimer(int id) {
+        return conn.getAsyncAuth("/timers/" + id)
+                .thenApply(response -> {
+                    try {
+                        return mapper.readValue(response, TimerDetails.class);
+                    } catch (JsonProcessingException e) {
+                        throw new CompletionException(e);
+                    }
+                });
     }
 }
