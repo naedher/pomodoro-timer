@@ -2,6 +2,7 @@ package org.example.model.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.infrastructure.ApiClient;
 import org.example.model.dto.TimerCreate;
 import org.example.model.dto.TimerDetails;
@@ -20,7 +21,7 @@ public class TimerServiceImpl implements TimerService {
 
     public TimerServiceImpl(String token) {
         this.apiClient = new ApiClient(token);
-        this.mapper = new ObjectMapper();
+        this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
     public void setObjectMapper(ObjectMapper mapper) {

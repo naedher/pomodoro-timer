@@ -2,6 +2,7 @@ package org.example.model.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.infrastructure.ApiClient;
 import org.example.model.dto.AuthRequest;
 import org.example.model.service.AuthService;
@@ -14,7 +15,7 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthServiceImpl() {
         this.apiClient = new ApiClient(null); // No token for authentication endpoints
-        this.mapper = new ObjectMapper();
+        this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
     @Override

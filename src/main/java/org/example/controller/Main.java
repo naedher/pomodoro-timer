@@ -136,7 +136,7 @@ public class Main {
         // Try with a known ID, depending on the logged in account.
         // The user with the email "test123@example.com" have a timer
         // with the id "20", in the DB.
-        long timerId = 21;
+        long timerId = 28;
         System.out.println("Testing get timer details for ID: " + timerId);
 
         CompletableFuture<TimerDetails> detailsFuture = timerService.getTimerDetails(timerId);
