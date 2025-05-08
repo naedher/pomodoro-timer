@@ -33,10 +33,15 @@ public class LoginScene {
 
     public Scene createScene() {
 
-//        Label titleLabel = new Label("Pomodoro Desktop Timer");
-//        titleLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 24));
-//        titleLabel.setStyle("-fx-text-fill: #888888;");
-//        titleLabel.setAlignment(Pos.CENTER);
+        Label titleLabel = new Label("Pomodoro Desktop Timer");
+        titleLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 24));
+        titleLabel.setStyle("-fx-text-fill: black;");
+        titleLabel.setAlignment(Pos.CENTER);
+
+
+
+
+
 
         Label emailLabel = new Label("Email:");
         emailField = new TextField();
@@ -66,7 +71,7 @@ public class LoginScene {
         HBox buttonBox = new HBox(10, login, creatAcc, exit);
         buttonBox.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(20, inputGrid, buttonBox);
+        VBox root = new VBox(20,titleLabel, inputGrid, buttonBox);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #f5f5f5;");
