@@ -15,8 +15,7 @@ module org.example {
     exports org.example.model.service to com.fasterxml.jackson.databind;
     exports org.example.infrastructure to com.fasterxml.jackson.databind;
 
-//    opens org.example to javafx.fxml;
-//    exports org.example to javafx.graphics;
-//    exports org.example.api;
-//    opens org.example.api to javafx.fxml;
+    opens org.example to javafx.fxml;
+    exports org.example.ui to javafx.graphics;
+    //opens org.example.api to javafx.fxml;
 }
