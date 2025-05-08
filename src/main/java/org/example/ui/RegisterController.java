@@ -14,7 +14,7 @@ public class RegisterController {
     }
 
     public void Register(String U, String L){
-
+        final String[] error = {""};
         Register2(U, L)
                 .thenAccept(result -> {
                     if (result.equals("success")) {
@@ -25,20 +25,20 @@ public class RegisterController {
 
                         // Kommande är ett försök att förska få individuella medelande per fel. Ej klart
 
-                        if(result.equals("java.lang.RuntimeException: Failed to create data: HTTP 500 - {\"error\":\"Something went wrong\"}")){
-                            String  errormessage = "Email adress already in use.";
-                        } else if (result.equals("java.net.ConnectException")) {
-                            String errormessage = "Check network connection.";
+                        if(result.equals("error: java.lang.RuntimeException: Failed to create data: HTTP 500 - {\"error\":\"Something went wrong\"}")){
+                              error[0] = "Email adress already in use.";  // generell?, får upp 500 när den redan är skapad iaf
+                        } else if (result.equals("error: java.net.ConnectException")) {
+                            error[0] = "Check network connection.";
                         }else{
-                            String errormessage = result;
+                            error[0] = result;
                         }
-                        
+
                         System.out.println("Error: " + result);
                         Platform.runLater(() -> {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Error");
                             alert.setHeaderText(null);
-                            alert.setContentText("Error: " + result);
+                            alert.setContentText("Error: " + error[0]);
                             alert.showAndWait();
                         });
 
