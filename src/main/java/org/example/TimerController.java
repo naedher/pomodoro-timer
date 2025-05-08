@@ -9,8 +9,6 @@ public class TimerController implements TimerCallback {
     @FXML private Button startButton, resetButton; // Start and reset buttons
     @FXML private ToggleButton focusButton, shortBreakButton, longBreakButton; // Toggle buttons for timer modes
     @FXML private Button debugButton; // Debug button for testing
-    @FXML private ListView<String> timerListView; // List view for saved timers
-    @FXML private Button addTimerButton; // Button to add a saved timer
     private Timer timer;
 
     // Initialize the timer and set up the UI
@@ -94,13 +92,6 @@ public class TimerController implements TimerCallback {
         startButton.setText("Start");
         updateIntervalDisplay();
         updateToggleButtons(timer.getCurrentMode());
-    }
-
-    // Add a saved timer to the list view
-    @FXML
-    private void addSavedTimer() {
-        // Empty for now. Will add logic when API connection is implemented
-        System.out.println("Add timer button clicked");
     }
 
     // debug button for testing (will be removed before release)
