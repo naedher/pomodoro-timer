@@ -4,14 +4,12 @@ import java.time.LocalDateTime;
 
 public class TimerUpdate {
     private String name;
-    private LocalDateTime createdAt;
     private int workDuration;
     private int breakDuration;
     private int pomodoroCount;
 
     public TimerUpdate(String name, LocalDateTime createdAt,int workDuration, int breakDuration, int pomodoroCount) {
         this.name = name;
-        this.createdAt = createdAt;
         this.workDuration = workDuration;
         this.breakDuration = breakDuration;
         this.pomodoroCount = pomodoroCount;
@@ -35,10 +33,6 @@ public class TimerUpdate {
         return pomodoroCount;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -53,9 +47,5 @@ public class TimerUpdate {
 
     public void setPomodoroCount(int pomodoroCount) {
         this.pomodoroCount = pomodoroCount;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
