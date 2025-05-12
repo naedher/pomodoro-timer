@@ -3,13 +3,15 @@ package org.example.model.dto;
 public class TimerCreate {
     private String name;
     private int workDuration;
-    private int breakDuration;
+    private int shortBreakDuration;
+    private int longBreakDuration;
     private int pomodoroCount;
 
-    public TimerCreate(String name, int workDuration, int breakDuration, int pomodoroCount) {
+    public TimerCreate(String name, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
         this.name = name;
         this.workDuration = workDuration;
-        this.breakDuration = breakDuration;
+        this.shortBreakDuration = shortBreakDuration;
+        this.longBreakDuration = longBreakDuration;
         this.pomodoroCount = pomodoroCount;
     }
 
@@ -23,8 +25,12 @@ public class TimerCreate {
         return workDuration;
     }
 
-    public int getBreakDuration() {
-        return breakDuration;
+    public int getShortBreakDuration() {
+        return shortBreakDuration;
+    }
+
+    public int getLongBreakDuration() {
+        return longBreakDuration;
     }
 
     public int getPomodoroCount() {
@@ -39,8 +45,12 @@ public class TimerCreate {
         this.workDuration = workDuration;
     }
 
-    public void setBreakDuration(int breakDuration) {
-        this.breakDuration = breakDuration;
+    public void setShortBreakDuration(int shortBreakDuration) {
+        this.shortBreakDuration = shortBreakDuration;
+    }
+
+    public void setLongBreakDuration(int longBreakDuration) {
+        this.longBreakDuration = longBreakDuration;
     }
 
     public void setPomodoroCount(int pomodoroCount) {
