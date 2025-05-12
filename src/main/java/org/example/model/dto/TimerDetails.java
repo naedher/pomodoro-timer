@@ -6,7 +6,6 @@ public class TimerDetails {
     private Long id;
     private String name;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private Integer workDuration;
     private Integer breakDuration;
     private Integer pomodoroCount;
@@ -44,14 +43,6 @@ public class TimerDetails {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Integer getWorkDuration() {
