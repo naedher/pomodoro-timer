@@ -18,7 +18,6 @@ public class TimerDetails {
             Long id,
             String name,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt,
             Integer workDuration,
             Integer shortBreakDuration,
             Integer longBreakDuration,
