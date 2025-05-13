@@ -18,6 +18,10 @@ public class AuthServiceImpl implements AuthService {
         this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
+    public ApiClient getApiClient() {
+        return apiClient;
+    }
+
     @Override
     public CompletableFuture<String> login(AuthRequest authRequest) throws JsonProcessingException {
         String jsonBody = mapper.writeValueAsString(authRequest);

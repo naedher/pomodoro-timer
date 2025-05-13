@@ -3,6 +3,7 @@ package org.example.ui;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import org.example.infrastructure.ApiClient;
 import org.example.model.dto.AuthRequest;
 import org.example.model.service.impl.AuthServiceImpl;
 
@@ -10,26 +11,29 @@ import java.util.concurrent.CompletableFuture;
 
 public class RegisterController {
     LoginScene loginScene;
+    private String[] Success = new String[1];
+    private AuthServiceImpl auth = new AuthServiceImpl();
 
     public RegisterController(LoginScene loginScene){
         this.loginScene = loginScene;
     }
 
-    public void Register(String U, String L){
+    public void Register(String Email, String Password){
+
         final String[] error = {""};
         try {
-            Register2(U, L)
+            Register2(Email, Password)
                     .thenAccept(result -> {
-                        if (result.equals("success")) {
-                            System.out.println("Allt gick bra!");
+                        if (!result.startsWith("error:")) {
+                            System.out.println("Allt gick bra");
                             loginScene.registrationsuccess();
+                            ApiClient api = auth.getApiClient();
+                            api.setToken(result);
 
                         } else {
 
-                            // Kommande är ett försök att förska få individuella medelande per fel. Ej klart
-
                             if(result.equals("error: java.lang.RuntimeException: Failed to create data: HTTP 500 - {\"error\":\"Something went wrong\"}")){
-                                error[0] = "Email adress already in use.";  // generell?, får upp 500 när den redan är skapad iaf
+                                error[0] = "Email adress already in use.";
                             } else if (result.equals("error: java.net.ConnectException")) {
                                 error[0] = "Check network connection.";
                             }else{
@@ -53,19 +57,29 @@ public class RegisterController {
 
     }
 
-    public CompletableFuture<String> Register2(String u, String l) throws JsonProcessingException {
-        AuthServiceImpl auth = new AuthServiceImpl();
-        AuthRequest authRequest = new AuthRequest(u,l);
+    public CompletableFuture<String> Register2(String Email, String Password) throws JsonProcessingException {
+        AuthRequest authRequest = new AuthRequest(Email,Password);
 
         return auth.register(authRequest)
-                .thenApply(token -> "success")
+                .thenApply(token ->{
+                    Success[0] = "Success";
+                    return token;
+                })
                 .exceptionally(ex -> {
                     System.out.println("Registration failed: " + ex.getMessage());
                     return "error: " + ex.getMessage();
                 });
+
+    }
+
+    public String[] getSuccess(){
+        return Success;
+
+    }
+
+    public void reset(){
+        Success[0] = null;
     }
 
 }
-
-
 

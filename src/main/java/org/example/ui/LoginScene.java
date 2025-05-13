@@ -11,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.example.infrastructure.ApiClient;
+import org.example.model.service.impl.AuthServiceImpl;
 
 import java.util.Optional;
 
@@ -18,7 +20,6 @@ public class LoginScene {
     private Main mainApp;
     private TextField emailField;
     private TextField passwordField;
-    private final LoginController loginController = new LoginController();
     private final RegisterController registerController = new RegisterController(this);
 
 
@@ -69,7 +70,6 @@ public class LoginScene {
         return new Scene(root, 350, 250);
     }
 
-
     private Button createStyledButton(String text, String color) {
         Button button = new Button(text);
         button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white;");
@@ -93,19 +93,10 @@ public class LoginScene {
             showAlert("Invalid Password", "Password must be at least 8 characters long");
             return;
         }
-        loginController.sendLoginRequest(email, password)
-                .thenAccept(token -> {
-                     Platform.runLater(() -> mainApp.timerScene());
-                })
-                .exceptionally(ex -> {
+        LoginController loginController = mainApp.getLoginController();
+        loginController.sendLoginRequest(email,password);
+        //mainApp.timerScene();
 
-                    Platform.runLater(() ->
-                            showAlert("Login Failed", ex.getMessage())
-                    );
-                    return null;
-                });
-
-        mainApp.timerScene();
     }
 
     private boolean isValidEmail(String email) {
@@ -164,8 +155,13 @@ public class LoginScene {
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.isPresent() && result.get() == yesButton) {
                 loginAction();
+                mainApp.timerScene();
             } else {
                 System.out.println("login cancelled.");
+                registerController.reset();
+                AuthServiceImpl auth = new AuthServiceImpl();
+                ApiClient api = auth.getApiClient();
+                api.setToken(null);
             }
         });
     }

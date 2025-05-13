@@ -54,7 +54,7 @@ public class Main {
         System.out.println("Testing registration...");
         CompletableFuture<String> registerFuture = null;
         try {
-            registerFuture = authService.register(new AuthRequest("test123456@example.com", "testpassword"));
+            registerFuture = authService.register(new AuthRequest("test12sdfsdfdfsdf3456@example.com", "testpassword"));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

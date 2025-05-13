@@ -21,6 +21,7 @@ public class ApiClient {
         this.token = token;
     }
 
+
     public CompletableFuture<String> get(String path) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(BASE_URL.resolve(path))
