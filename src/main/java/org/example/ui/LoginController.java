@@ -1,51 +1,59 @@
 // src/main/java/org/example/LoginController.java
-package org.example.ui;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+
+// src/main/java/org/example/LoginController.java
+        package org.example.ui;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import org.example.infrastructure.ApiClient;
+import org.example.model.dto.AuthRequest;
+import org.example.model.service.impl.AuthServiceImpl;
+
 import java.util.concurrent.CompletableFuture;
 
-import org.json.JSONObject;
-
 public class LoginController {
-    private final HttpClient client = HttpClient.newHttpClient();
-    private final String loginUrl = "https://pomodoro-timer.koyeb.app/api/auth/login";
 
-    public CompletableFuture<String> sendLoginRequest(String email, String password) {
-        String jsonBody = String.format("""
-            {
-              "email": "%s",
-              "password": "%s"
-            }
-            """, email, password);
+    private final Main mainApp;
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(loginUrl))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                .build();
+    public LoginController(Main mainApp) {
+        this.mainApp = mainApp;
+    }
 
-        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(resp -> {
+    public void sendLoginRequest(String Email, String Password){
+        try {
+            sendLoginRequest2(Email,Password);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-                    System.out.println("Status code: " + resp.statusCode());
-                    System.out.println("Response body: " + resp.body());
+    public CompletableFuture<String> sendLoginRequest2(String Email, String Password) throws JsonProcessingException {
+        AuthServiceImpl auth = new AuthServiceImpl();
+        AuthRequest authRequest = new AuthRequest(Email,Password);
 
-                    int status = resp.statusCode();
-                    if (status != 200) {
-                        throw new RuntimeException("Login failed: HTTP " + status);
-                    }
+        auth.login(authRequest)
+                .thenAccept(token -> {
+                    System.out.println("Login successful. Token: " + token);
+                    ApiClient api = auth.getApiClient();
+                    api.setToken(token);
 
-                    JSONObject obj = new JSONObject(resp.body());
-                    return obj.getString("token");
+                    Platform.runLater(() -> {
+                        mainApp.timerScene();
+                    });
                 })
-                .exceptionally(e -> {
-
-                    System.out.println("Problem with request: " + e.getMessage());
-
+                .exceptionally(ex -> {
+                    System.err.println("Login failed: " + ex.getMessage());
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Login Failed");
+                        alert.setHeaderText("Invalid login credentials or server error");
+                        alert.setContentText(ex.getMessage());
+                        alert.showAndWait();
+                    });
                     return null;
                 });
+        return null;
     }
 }

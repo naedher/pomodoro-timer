@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private Stage primaryStage;
+    private LoginController loginC;
 
     @Override
     public void start(Stage primaryStage) {
@@ -18,12 +19,18 @@ public class Main extends Application {
     // Scen för inloggning
     public void loginScene() {
         LoginScene loginScene = new LoginScene(this);
+        loginC = new LoginController(this);
         Scene scene = loginScene.createScene();
         primaryStage.setTitle("Pomodoro Timer - Login");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
     }
+
+    public LoginController getLoginController(){
+        return loginC;
+    }
+
 
     // Scen för timer
     public void timerScene() {
