@@ -43,4 +43,8 @@ public class AuthServiceImpl implements AuthService {
                     }
                 });
     }
+
+    public ApiClient getApiClient() {
+        return apiClient;
+    }
 }
