@@ -7,17 +7,30 @@ public class TimerDetails {
     private String name;
     private LocalDateTime createdAt;
     private Integer workDuration;
-    private Integer breakDuration;
+    private Integer shortBreakDuration;
+    private Integer longBreakDuration;
     private Integer pomodoroCount;
 
     // Default constructor needed for JSON deserialization
     public TimerDetails() { }
 
-    public TimerDetails(Long id, String name, Integer workDuration, Integer breakDuration, Integer pomodoroCount) {
+    public TimerDetails(
+            Long id,
+            String name,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            Integer workDuration,
+            Integer shortBreakDuration,
+            Integer longBreakDuration,
+            Integer pomodoroCount
+    ) {
         this.id = id;
         this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.workDuration = workDuration;
-        this.breakDuration = breakDuration;
+        this.shortBreakDuration = shortBreakDuration;
+        this.longBreakDuration = longBreakDuration;
         this.pomodoroCount = pomodoroCount;
     }
 
@@ -53,12 +66,20 @@ public class TimerDetails {
         this.workDuration = workDuration;
     }
 
-    public Integer getBreakDuration() {
-        return breakDuration;
+    public Integer getShortBreakDuration() {
+        return shortBreakDuration;
     }
 
-    public void setBreakDuration(Integer breakDuration) {
-        this.breakDuration = breakDuration;
+    public void setShortBreakDuration(Integer shortBreakDuration) {
+        this.shortBreakDuration = shortBreakDuration;
+    }
+
+    public Integer getLongBreakDuration() {
+        return longBreakDuration;
+    }
+
+    public void setLongBreakDuration(Integer longBreakDuration) {
+        this.longBreakDuration = longBreakDuration;
     }
 
     public Integer getPomodoroCount() {
