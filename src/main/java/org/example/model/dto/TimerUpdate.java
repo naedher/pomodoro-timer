@@ -4,16 +4,16 @@ import java.time.LocalDateTime;
 
 public class TimerUpdate {
     private String name;
-    private LocalDateTime createdAt;
     private int workDuration;
-    private int breakDuration;
+    private int shortBreakDuration;
+    private int longBreakDuration;
     private int pomodoroCount;
 
-    public TimerUpdate(String name, LocalDateTime createdAt,int workDuration, int breakDuration, int pomodoroCount) {
+    public TimerUpdate(String name, LocalDateTime createdAt, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
         this.name = name;
-        this.createdAt = createdAt;
         this.workDuration = workDuration;
-        this.breakDuration = breakDuration;
+        this.shortBreakDuration = shortBreakDuration;
+        this.longBreakDuration = longBreakDuration;
         this.pomodoroCount = pomodoroCount;
     }
 
@@ -27,16 +27,16 @@ public class TimerUpdate {
         return workDuration;
     }
 
-    public int getBreakDuration() {
-        return breakDuration;
+    public int getShortBreakDuration() {
+        return shortBreakDuration;
+    }
+
+    public int getLongBreakDuration() {
+        return longBreakDuration;
     }
 
     public int getPomodoroCount() {
         return pomodoroCount;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 
     public void setName(String name) {
@@ -47,15 +47,15 @@ public class TimerUpdate {
         this.workDuration = workDuration;
     }
 
-    public void setBreakDuration(int breakDuration) {
-        this.breakDuration = breakDuration;
+    public void setShortBreakDuration(int shortBreakDuration) {
+        this.shortBreakDuration = shortBreakDuration;
+    }
+
+    public void setLongBreakDuration(int longBreakDuration) {
+        this.longBreakDuration = longBreakDuration;
     }
 
     public void setPomodoroCount(int pomodoroCount) {
         this.pomodoroCount = pomodoroCount;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
