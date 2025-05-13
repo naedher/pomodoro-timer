@@ -1,5 +1,5 @@
 // src/main/java/org/example/LoginController.java
-package org.example;
+package org.example.ui;
 
 import java.net.URI;
 import java.net.http.HttpClient;
