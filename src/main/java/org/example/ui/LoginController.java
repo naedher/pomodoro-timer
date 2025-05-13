@@ -1,8 +1,4 @@
-// src/main/java/org/example/LoginController.java
-
-
-// src/main/java/org/example/LoginController.java
-        package org.example.ui;
+package org.example.ui;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Platform;

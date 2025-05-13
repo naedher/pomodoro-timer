@@ -11,8 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.example.infrastructure.ApiClient;
-import org.example.model.service.impl.AuthServiceImpl;
+import org.example.model.AppContext;
+
 
 import java.util.Optional;
 
@@ -161,9 +161,8 @@ public class LoginScene {
             } else {
                 System.out.println("login cancelled.");
                 registerController.reset();
-                AuthServiceImpl auth = new AuthServiceImpl();
-                ApiClient api = auth.getApiClient();
-                api.setToken(null);
+                AppContext app = AppContext.getInstance();
+                app.setAuthToken(null);
             }
         });
     }

@@ -3,7 +3,6 @@ package org.example.ui;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import org.example.infrastructure.ApiClient;
 import org.example.model.AppContext;
 import org.example.model.dto.AuthRequest;
 import org.example.model.service.impl.AuthServiceImpl;
