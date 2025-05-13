@@ -1,4 +1,4 @@
-package org.example;
+package org.example.ui;
 
 public enum TimerMode {
     FOCUS("FOCUS", 25 * 60), // 25 minutes

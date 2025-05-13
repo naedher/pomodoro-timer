@@ -1,4 +1,4 @@
-package org.example;
+package org.example.ui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

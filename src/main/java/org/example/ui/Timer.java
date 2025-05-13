@@ -1,4 +1,4 @@
-package org.example;
+package org.example.ui;
 
 public class Timer {
     private TimerMode currentMode = TimerMode.FOCUS; // Default mode

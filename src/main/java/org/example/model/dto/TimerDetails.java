@@ -6,6 +6,7 @@ public class TimerDetails {
     private Long id;
     private String name;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt; // Add this field
     private Integer workDuration;
     private Integer shortBreakDuration;
     private Integer longBreakDuration;
@@ -56,6 +57,14 @@ public class TimerDetails {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt; // Add getter
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt; // Add setter
     }
 
     public Integer getWorkDuration() {
