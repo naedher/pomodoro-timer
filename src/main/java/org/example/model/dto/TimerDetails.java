@@ -27,7 +27,6 @@ public class TimerDetails {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.workDuration = workDuration;
         this.shortBreakDuration = shortBreakDuration;
         this.longBreakDuration = longBreakDuration;
