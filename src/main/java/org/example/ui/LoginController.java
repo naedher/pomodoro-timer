@@ -7,7 +7,7 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import org.example.infrastructure.ApiClient;
+import org.example.model.AppContext;
 import org.example.model.dto.AuthRequest;
 import org.example.model.service.impl.AuthServiceImpl;
 
@@ -36,8 +36,8 @@ public class LoginController {
         auth.login(authRequest)
                 .thenAccept(token -> {
                     System.out.println("Login successful. Token: " + token);
-                    ApiClient api = auth.getApiClient();
-                    api.setToken(token);
+                    AppContext app = AppContext.getInstance();
+                    app.setAuthToken(token);
 
                     Platform.runLater(() -> {
                         mainApp.timerScene();

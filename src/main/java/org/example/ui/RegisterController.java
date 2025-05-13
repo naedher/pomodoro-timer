@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import org.example.infrastructure.ApiClient;
+import org.example.model.AppContext;
 import org.example.model.dto.AuthRequest;
 import org.example.model.service.impl.AuthServiceImpl;
 
@@ -26,9 +27,9 @@ public class RegisterController {
                     .thenAccept(result -> {
                         if (!result.startsWith("error:")) {
                             System.out.println("Allt gick bra");
-                            loginScene.registrationsuccess();
-                            ApiClient api = auth.getApiClient();
-                            api.setToken(result);
+                            loginScene.registrationSuccess();
+                            AppContext app = AppContext.getInstance();
+                            app.setAuthToken(result);
 
                         } else {
 

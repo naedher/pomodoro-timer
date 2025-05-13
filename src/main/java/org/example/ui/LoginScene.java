@@ -135,7 +135,7 @@ public class LoginScene {
 
     }
 
-    public void registrationsuccess() {
+    public void registrationSuccess() {
 
         Platform.runLater(() -> {
             Alert dialog = new Alert(Alert.AlertType.NONE);
