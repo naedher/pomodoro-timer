@@ -9,7 +9,7 @@ public class TimerUpdate {
     private int longBreakDuration;
     private int pomodoroCount;
 
-    public TimerUpdate(String name, LocalDateTime createdAt, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
+    public TimerUpdate(String name, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
         this.name = name;
         this.workDuration = workDuration;
         this.shortBreakDuration = shortBreakDuration;

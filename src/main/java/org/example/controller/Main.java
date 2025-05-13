@@ -3,7 +3,6 @@ package org.example.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
 import org.example.model.dto.AuthRequest;
@@ -105,17 +104,19 @@ public class Main {
 
         String name = "Test Timer " + System.currentTimeMillis();
         int workDuration = 25;  // Standard pomodoro time
-        int breakDuration = 5;  // Standard break time
+        int shortBreakDuration = 5;  // Short break time
+        int longBreakDuration = 15;  // Long break time
         int pomodoroCount = 4;  // Standard count
 
         System.out.println("Creating timer with: name=" + name +
                 ", workDuration=" + workDuration +
-                ", breakDuration=" + breakDuration +
+                ", shortBreakDuration=" + shortBreakDuration +
+                ", longBreakDuration=" + longBreakDuration +
                 ", pomodoroCount=" + pomodoroCount);
 
         CompletableFuture<Void> createFuture = null;
         try {
-            createFuture = timerService.createTimer(new TimerCreate(name, workDuration, breakDuration, pomodoroCount));
+            createFuture = timerService.createTimer(new TimerCreate(name, workDuration, shortBreakDuration, longBreakDuration, pomodoroCount));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -150,7 +151,8 @@ public class Main {
             System.out.println("ID: " + details.getId());
             System.out.println("Name: " + details.getName());
             System.out.println("Work Duration: " + details.getWorkDuration());
-            System.out.println("Break Duration: " + details.getBreakDuration());
+            System.out.println("Long Break Duration: " + details.getLongBreakDuration());
+            System.out.println("Short Break Duration: " + details.getShortBreakDuration());
             System.out.println("Pomodoro Count: " + details.getPomodoroCount());
         }).exceptionally(throwable -> {
             System.out.println("Failed to get timer details: " + throwable.getMessage());
@@ -169,18 +171,13 @@ public class Main {
         System.out.println("Testing update timer for ID: " + timerId);
 
         // Use a string date format instead of LocalDateTime or configure Jackson
-        TimerUpdate update = new TimerUpdate(
-                "Timer",
-                null, // Remove LocalDateTime to avoid serialization issues
-                2,
-                2,
-                2
-        );
+        TimerUpdate update = new TimerUpdate("Timer", 2, 2, 1, 2);
 
         System.out.println("Updating timer with:" +
                 " Name=" + update.getName() +
                 ", workDuration=" + update.getWorkDuration() +
-                ", breakDuration=" + update.getBreakDuration() +
+                ", Long Break Duration=" + update.getLongBreakDuration() +
+                ", Short Break Duration=" + update.getShortBreakDuration() +
                 ", pomodoroCount=" + update.getPomodoroCount());
 
         // Call updateTimer once and handle the result properly
