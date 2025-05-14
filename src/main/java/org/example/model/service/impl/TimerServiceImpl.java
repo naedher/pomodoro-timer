@@ -13,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 
 public class TimerServiceImpl implements TimerService {
     private final ApiClient apiClient;
@@ -34,6 +35,19 @@ public class TimerServiceImpl implements TimerService {
                 .thenApply(response -> {
                     try {
                         return mapper.readValue(response, TimerDetails.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    @Override
+    public CompletableFuture<List<TimerDetails>> getUserTimers() {
+        return apiClient.get("/timers")
+                .thenApply(response -> {
+                    try {
+                        return mapper.readValue(response, 
+                            mapper.getTypeFactory().constructCollectionType(List.class, TimerDetails.class));
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
