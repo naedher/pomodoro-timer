@@ -2,6 +2,7 @@ package org.example.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.example.exceptions.HttpExceptionFactory;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -33,8 +34,7 @@ public class ApiClient {
                     if (resp.statusCode() >= 200 && resp.statusCode() < 300) {
                         return resp.body();
                     }
-
-                    throw new RuntimeException("Failed to get data: HTTP " + resp.statusCode() + " - " + resp.body());
+                    throw HttpExceptionFactory.getHttpException(resp.statusCode(), resp.body());
                 });
     }
 
@@ -63,7 +63,7 @@ public class ApiClient {
                         if (resp.statusCode() >= 200 && resp.statusCode() < 300) {
                             return resp.body();
                         }
-                        throw new RuntimeException("Failed to create data: HTTP " + resp.statusCode() + " - " + resp.body());
+                        throw HttpExceptionFactory.getHttpException(resp.statusCode(), resp.body());
                     });
         } catch (Exception e) {
             return CompletableFuture.failedFuture(e);
@@ -84,7 +84,7 @@ public class ApiClient {
                         if (resp.statusCode() >= 200 && resp.statusCode() < 300) {
                             return null;
                         }
-                        throw new RuntimeException("Failed to create data: HTTP " + resp.statusCode() + " - " + resp.body());
+                        throw HttpExceptionFactory.getHttpException(resp.statusCode(), resp.body());
                     });
         } catch (Exception e) {
             return CompletableFuture.failedFuture(e);
@@ -103,7 +103,7 @@ public class ApiClient {
                     if (resp.statusCode() >= 200 && resp.statusCode() < 300) {
                         return null;
                     }
-                    throw new RuntimeException("Failed to delete data: HTTP " + resp.statusCode() + " - " + resp.body());
+                    throw HttpExceptionFactory.getHttpException(resp.statusCode(), resp.body());
                 });
     }
 
