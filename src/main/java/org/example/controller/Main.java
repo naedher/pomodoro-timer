@@ -2,9 +2,12 @@ package org.example.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
+import org.example.infrastructure.ApiClient;
 import org.example.model.dto.AuthRequest;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.impl.AuthServiceImpl;
@@ -16,31 +19,33 @@ public class Main {
     private AuthServiceImpl authService;
     private TimerServiceImpl timerService;
     private String authToken;
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public static void main(String[] args) {
         Main main = new Main();
         main.authService = new AuthServiceImpl();
-
-        // Comment out registration for the creation of an new account!
-         main.testRegister();
-         System.out.println("Register testing finished.");
+//        Comment out registration for the creation of an new account!
+//         main.testRegister();
+//         System.out.println("Register testing finished.");
 
         main.testLogin();
         System.out.println("Login testing finished.");
 
         //only if login was successful!!
         if (main.timerService != null) {
-            // Done
+
             main.testCreateTimer();
             System.out.println("Create timer testing finished.");
 
             main.testGetTimerDetails();
             System.out.println("Get timer details testing finished.");
 
+            main.testGetUserTimers();
+            System.out.println("Get user timers testing finished.");
+
             main.testUpdateTimer();
             System.out.println("Update timer testing finished.");
-            // Done
+
             main.testDeleteTimer();
             System.out.println("Delete timer testing finished.");
         } else {
@@ -156,6 +161,35 @@ public class Main {
             System.out.println("Pomodoro Count: " + details.getPomodoroCount());
         }).exceptionally(throwable -> {
             System.out.println("Failed to get timer details: " + throwable.getMessage());
+            return null;
+        }).join();
+    }
+
+    public void testGetUserTimers() {
+        if (timerService == null) {
+            System.out.println("Timer service not initialized. Please login first.");
+            return;
+        }
+        System.out.println("Testing get user timers...");
+
+        CompletableFuture<List<TimerDetails>> timersFuture = timerService.getUserTimers();
+        timersFuture.thenAccept(timers -> {
+            System.out.println("User timers retrieved successfully!");
+            System.out.println("Number of timers: " + timers.size());
+            
+            for (TimerDetails timer : timers) {
+                System.out.println("\n----------------------------------------");
+                System.out.println("Timer ID: " + timer.getId());
+                System.out.println("Name: " + timer.getName());
+                System.out.println("Created At: " + timer.getCreatedAt());
+                System.out.println("Work Duration: " + timer.getWorkDuration() + " minutes");
+                System.out.println("Short Break Duration: " + timer.getShortBreakDuration() + " minutes");
+                System.out.println("Long Break Duration: " + timer.getLongBreakDuration() + " minutes");
+                System.out.println("Pomodoro Count: " + timer.getPomodoroCount());
+                System.out.println("----------------------------------------");
+            }
+        }).exceptionally(throwable -> {
+            System.out.println("Failed to get timers: " + throwable.getMessage());
             return null;
         }).join();
     }
