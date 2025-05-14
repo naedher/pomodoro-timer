@@ -3,14 +3,15 @@ package org.example.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
 import org.example.model.dto.AuthRequest;
 import org.example.model.dto.TimerCreate;
-import org.example.model.dto.TimerDetails;
-import org.example.model.dto.TimerUpdate;
 import org.example.model.service.impl.AuthServiceImpl;
 import org.example.model.service.impl.TimerServiceImpl;
+import org.example.model.dto.TimerUpdate;
+import org.example.model.dto.TimerDetails;
 
 public class Main {
     private AuthServiceImpl authService;
@@ -22,13 +23,16 @@ public class Main {
         Main main = new Main();
         main.authService = new AuthServiceImpl();
 
-        main.testRegister();
-        System.out.println("Register testing finished.");
+        // Comment out registration for the creation of an new account!
+         main.testRegister();
+         System.out.println("Register testing finished.");
 
         main.testLogin();
         System.out.println("Login testing finished.");
 
+        //only if login was successful!!
         if (main.timerService != null) {
+            // Done
             main.testCreateTimer();
             System.out.println("Create timer testing finished.");
 
@@ -37,7 +41,7 @@ public class Main {
 
             main.testUpdateTimer();
             System.out.println("Update timer testing finished.");
-
+            // Done
             main.testDeleteTimer();
             System.out.println("Delete timer testing finished.");
         } else {
@@ -45,6 +49,7 @@ public class Main {
         }
     }
 
+    // Change the AuthRequest args to register a new user
     public void testRegister() {
         System.out.println("Testing registration...");
         CompletableFuture<String> registerFuture = null;
@@ -66,6 +71,8 @@ public class Main {
 
     public void testLogin() {
         System.out.println("Testing login...");
+
+        // An existed user from the DB!
         CompletableFuture<String> loginFuture = null;
         try {
             loginFuture = authService.login(new AuthRequest("test123@example.com", "testpassword"));
@@ -77,6 +84,9 @@ public class Main {
             System.out.println("Login successful! Token: " + token.substring(0, 10) + "...");
             this.authToken = token;
             this.timerService = new TimerServiceImpl(token);
+
+            // Print the token for debugging...
+            System.out.println("Full token for debugging: " + token);
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             System.out.println("Login failed: " + throwable.getMessage());
@@ -84,6 +94,8 @@ public class Main {
         }).join();
     }
 
+    // Can be used later for creating default timers!
+    // Adding more default timers when a new user register..
     public void testCreateTimer() {
         if (timerService == null) {
             System.out.println("Timer service not initialized. Please login first.");
@@ -92,20 +104,18 @@ public class Main {
         System.out.println("Testing create timer...");
 
         String name = "Test Timer " + System.currentTimeMillis();
-        int workDuration = 25;
-        int shortBreakDuration = 5;
-        int longBreakDuration = 15;
-        int pomodoroCount = 4;
+        int workDuration = 25;  // Standard pomodoro time
+        int breakDuration = 5;  // Standard break time
+        int pomodoroCount = 4;  // Standard count
 
         System.out.println("Creating timer with: name=" + name +
                 ", workDuration=" + workDuration +
-                ", shortBreakDuration=" + shortBreakDuration +
-                ", longBreakDuration=" + longBreakDuration +
+                ", breakDuration=" + breakDuration +
                 ", pomodoroCount=" + pomodoroCount);
 
         CompletableFuture<Void> createFuture = null;
         try {
-            createFuture = timerService.createTimer(new TimerCreate(name, workDuration, shortBreakDuration, longBreakDuration, pomodoroCount));
+            createFuture = timerService.createTimer(new TimerCreate(name, workDuration, breakDuration, pomodoroCount));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -123,6 +133,9 @@ public class Main {
             return;
         }
 
+        // Try with a known ID, depending on the logged in account.
+        // The user with the email "test123@example.com" have a timer
+        // with the id "20", in the DB.
         long timerId = 28;
         System.out.println("Testing get timer details for ID: " + timerId);
 
@@ -137,8 +150,7 @@ public class Main {
             System.out.println("ID: " + details.getId());
             System.out.println("Name: " + details.getName());
             System.out.println("Work Duration: " + details.getWorkDuration());
-            System.out.println("Short Break Duration: " + details.getShortBreakDuration());
-            System.out.println("Long Break Duration: " + details.getLongBreakDuration());
+            System.out.println("Break Duration: " + details.getBreakDuration());
             System.out.println("Pomodoro Count: " + details.getPomodoroCount());
         }).exceptionally(throwable -> {
             System.out.println("Failed to get timer details: " + throwable.getMessage());
@@ -152,25 +164,26 @@ public class Main {
             return;
         }
 
+        // Try with a known ID
         long timerId = 25;
         System.out.println("Testing update timer for ID: " + timerId);
 
+        // Use a string date format instead of LocalDateTime or configure Jackson
         TimerUpdate update = new TimerUpdate(
-                "Updated Timer",
-                null,
-                30,
-                10,
-                20,
-                6
+                "Timer",
+                null, // Remove LocalDateTime to avoid serialization issues
+                2,
+                2,
+                2
         );
 
         System.out.println("Updating timer with:" +
                 " Name=" + update.getName() +
                 ", workDuration=" + update.getWorkDuration() +
-                ", shortBreakDuration=" + update.getShortBreakDuration() +
-                ", longBreakDuration=" + update.getLongBreakDuration() +
+                ", breakDuration=" + update.getBreakDuration() +
                 ", pomodoroCount=" + update.getPomodoroCount());
 
+        // Call updateTimer once and handle the result properly
         CompletableFuture<Void> updateFuture = null;
         try {
             updateFuture = timerService.updateTimer(timerId, update);
@@ -193,6 +206,7 @@ public class Main {
             return;
         }
 
+        // Try with a known ID.
         long timerId = 243;
         System.out.println("Testing delete timer for ID: " + timerId);
 
