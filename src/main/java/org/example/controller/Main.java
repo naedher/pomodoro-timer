@@ -2,10 +2,12 @@ package org.example.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
+import org.example.infrastructure.ApiClient;
 import org.example.model.dto.AuthRequest;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.impl.AuthServiceImpl;
@@ -17,31 +19,33 @@ public class Main {
     private AuthServiceImpl authService;
     private TimerServiceImpl timerService;
     private String authToken;
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public static void main(String[] args) {
         Main main = new Main();
         main.authService = new AuthServiceImpl();
-
-        // Comment out registration for the creation of an new account!
-         main.testRegister();
-         System.out.println("Register testing finished.");
+//        Comment out registration for the creation of an new account!
+//         main.testRegister();
+//         System.out.println("Register testing finished.");
 
         main.testLogin();
         System.out.println("Login testing finished.");
 
         //only if login was successful!!
         if (main.timerService != null) {
-            // Done
+
             main.testCreateTimer();
             System.out.println("Create timer testing finished.");
 
             main.testGetTimerDetails();
             System.out.println("Get timer details testing finished.");
 
+            main.testGetUserTimers();
+            System.out.println("Get user timers testing finished.");
+
             main.testUpdateTimer();
             System.out.println("Update timer testing finished.");
-            // Done
+
             main.testDeleteTimer();
             System.out.println("Delete timer testing finished.");
         } else {
@@ -105,17 +109,19 @@ public class Main {
 
         String name = "Test Timer " + System.currentTimeMillis();
         int workDuration = 25;  // Standard pomodoro time
-        int breakDuration = 5;  // Standard break time
+        int shortBreakDuration = 5;  // Short break time
+        int longBreakDuration = 15;  // Long break time
         int pomodoroCount = 4;  // Standard count
 
         System.out.println("Creating timer with: name=" + name +
                 ", workDuration=" + workDuration +
-                ", breakDuration=" + breakDuration +
+                ", shortBreakDuration=" + shortBreakDuration +
+                ", longBreakDuration=" + longBreakDuration +
                 ", pomodoroCount=" + pomodoroCount);
 
         CompletableFuture<Void> createFuture = null;
         try {
-            createFuture = timerService.createTimer(new TimerCreate(name, workDuration, breakDuration, pomodoroCount));
+            createFuture = timerService.createTimer(new TimerCreate(name, workDuration, shortBreakDuration, longBreakDuration, pomodoroCount));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -150,10 +156,40 @@ public class Main {
             System.out.println("ID: " + details.getId());
             System.out.println("Name: " + details.getName());
             System.out.println("Work Duration: " + details.getWorkDuration());
-            System.out.println("Break Duration: " + details.getBreakDuration());
+            System.out.println("Long Break Duration: " + details.getLongBreakDuration());
+            System.out.println("Short Break Duration: " + details.getShortBreakDuration());
             System.out.println("Pomodoro Count: " + details.getPomodoroCount());
         }).exceptionally(throwable -> {
             System.out.println("Failed to get timer details: " + throwable.getMessage());
+            return null;
+        }).join();
+    }
+
+    public void testGetUserTimers() {
+        if (timerService == null) {
+            System.out.println("Timer service not initialized. Please login first.");
+            return;
+        }
+        System.out.println("Testing get user timers...");
+
+        CompletableFuture<List<TimerDetails>> timersFuture = timerService.getUserTimers();
+        timersFuture.thenAccept(timers -> {
+            System.out.println("User timers retrieved successfully!");
+            System.out.println("Number of timers: " + timers.size());
+            
+            for (TimerDetails timer : timers) {
+                System.out.println("\n----------------------------------------");
+                System.out.println("Timer ID: " + timer.getId());
+                System.out.println("Name: " + timer.getName());
+                System.out.println("Created At: " + timer.getCreatedAt());
+                System.out.println("Work Duration: " + timer.getWorkDuration() + " minutes");
+                System.out.println("Short Break Duration: " + timer.getShortBreakDuration() + " minutes");
+                System.out.println("Long Break Duration: " + timer.getLongBreakDuration() + " minutes");
+                System.out.println("Pomodoro Count: " + timer.getPomodoroCount());
+                System.out.println("----------------------------------------");
+            }
+        }).exceptionally(throwable -> {
+            System.out.println("Failed to get timers: " + throwable.getMessage());
             return null;
         }).join();
     }
@@ -169,18 +205,13 @@ public class Main {
         System.out.println("Testing update timer for ID: " + timerId);
 
         // Use a string date format instead of LocalDateTime or configure Jackson
-        TimerUpdate update = new TimerUpdate(
-                "Timer",
-                null, // Remove LocalDateTime to avoid serialization issues
-                2,
-                2,
-                2
-        );
+        TimerUpdate update = new TimerUpdate("Timer", 2, 2, 1, 2);
 
         System.out.println("Updating timer with:" +
                 " Name=" + update.getName() +
                 ", workDuration=" + update.getWorkDuration() +
-                ", breakDuration=" + update.getBreakDuration() +
+                ", Long Break Duration=" + update.getLongBreakDuration() +
+                ", Short Break Duration=" + update.getShortBreakDuration() +
                 ", pomodoroCount=" + update.getPomodoroCount());
 
         // Call updateTimer once and handle the result properly
