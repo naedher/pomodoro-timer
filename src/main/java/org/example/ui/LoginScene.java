@@ -4,39 +4,46 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import org.example.model.AppContext;
+
+
+import java.util.Optional;
 
 public class LoginScene {
     private Main mainApp;
-    private TextField emailField; // Input field for email
-    private TextField passwordField; // Input field for password
-    private LoginController loginController = new LoginController();
+    private TextField emailField;
+    private TextField passwordField;
+    private final RegisterController registerController = new RegisterController(this);
 
 
     public LoginScene(Main mainApp) {
         this.mainApp = mainApp;
     }
 
-    // Creates and returns the login scene UI
     public Scene createScene() {
+
+        Label titleLabel = new Label("Pomodoro Desktop Timer");
+        titleLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 24));
+        titleLabel.setStyle("-fx-text-fill: black;");
+        titleLabel.setAlignment(Pos.CENTER);
+
         Label emailLabel = new Label("Email:");
         emailField = new TextField();
         emailField.setPromptText("Email");
         emailField.setPrefWidth(140);
 
-        // Create and configure the password label and input field
         Label passwordLabel = new Label("Password:");
         passwordField = new TextField();
         passwordField.setPromptText("Password");
         passwordField.setPrefWidth(140);
 
-        // Create and configure the input grid
         GridPane inputGrid = new GridPane();
         inputGrid.setHgap(10);
         inputGrid.setVgap(10);
@@ -44,22 +51,18 @@ public class LoginScene {
         inputGrid.addRow(1, passwordLabel, passwordField);
         inputGrid.setAlignment(Pos.CENTER);
 
-        // Create and configure the buttons
-        Button login = createStyledButton("Login", "#4CAF50");
-        Button guest = createStyledButton("Guest mode", "#FFC107");
-        Button exit = createStyledButton("Exit", "#f44336");
+        Button login = createStyledButton("Login", "#888888");
+        Button creatAcc = createStyledButton("New Account", "#888888");
+        Button exit = createStyledButton("Exit", "#888888");
 
-        // Set button actions
         login.setOnAction(e -> loginAction());
-        guest.setOnAction(e -> guestModeAction());
+        creatAcc.setOnAction(e -> newAccAction());
         exit.setOnAction(e -> exitAction());
 
-        // Create and configure the button box
-        HBox buttonBox = new HBox(10, login, guest, exit);
+        HBox buttonBox = new HBox(10, login, creatAcc, exit);
         buttonBox.setAlignment(Pos.CENTER);
 
-        // Create and configure the root layout
-        VBox root = new VBox(20, inputGrid, buttonBox);
+        VBox root = new VBox(20,titleLabel, inputGrid, buttonBox);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #f5f5f5;");
@@ -67,7 +70,6 @@ public class LoginScene {
         return new Scene(root, 350, 250);
     }
 
-    // Helper method to create a styled button
     private Button createStyledButton(String text, String color) {
         Button button = new Button(text);
         button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white;");
@@ -75,39 +77,28 @@ public class LoginScene {
         return button;
     }
 
-    // Action method for the login button
     private void loginAction() {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        // Error handling for email
+        // Felhantering för mail
         if (!isValidEmail(email)) {
             showAlert("Invalid Email", "Please enter a valid email address.");
             return;
         }
 
-        // Error handling for password (8 < characters)
+        // Felhantering för lösenord
+        // Felhantering för stor bokstav, specialtecken, etc kan vi lägga till senare
         if (password.length() < 8) {
             showAlert("Invalid Password", "Password must be at least 8 characters long");
             return;
         }
-        // Send login request
-        loginController.sendLoginRequest(email, password)
-                .thenAccept(token -> {
-                    Platform.runLater(() -> mainApp.timerScene());
-                })
-                .exceptionally(ex -> {
+        LoginController loginController = mainApp.getLoginController();
+        loginController.sendLoginRequest(email,password);
+        //mainApp.timerScene();
 
-                    Platform.runLater(() ->
-                            showAlert("Login Failed", ex.getMessage())
-                    );
-                    return null;
-                });
-
-        mainApp.timerScene();
     }
 
-    // Helper method to validate email domain
     private boolean isValidEmail(String email) {
         String[] validDomains = {"@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@icloud.com"};
         for (String domain : validDomains) {
@@ -118,7 +109,6 @@ public class LoginScene {
         return false;
     }
 
-    // Helper method to show alert dialog
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -127,13 +117,57 @@ public class LoginScene {
         alert.showAndWait();
     }
 
-    // Action method for guest mode button
-    private void guestModeAction() {
-        System.out.println("Guest mode selected");
-        mainApp.timerScene();
+    private void newAccAction() {
+        String email = emailField.getText();
+        String password = passwordField.getText();
+
+        if (!isValidEmail(email)) {
+            showAlert("Invalid Email", "Please enter a valid email address.");
+            return;
+        }
+        if (password.length() < 8) {
+            showAlert("Invalid Password", "Password must be at least 8 characters long");
+            return;
+        }
+        registerController.Register(email,password);
+
+
+
     }
 
-    // Action method for exit button
+    public void registrationSuccess() {
+
+        Platform.runLater(() -> {
+            Alert dialog = new Alert(Alert.AlertType.NONE);
+            dialog.setTitle("Registration");
+            dialog.setHeaderText("Registration successful");
+            dialog.setContentText("Log in with your new account?");
+
+            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+            ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+            dialog.getButtonTypes().setAll(yesButton, noButton);
+
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().clear();
+
+            dialog.getDialogPane().setStyle("-fx-font-size: 14px; -fx-background-color: #f9f9f9;");
+            dialog.getDialogPane().lookupButton(yesButton).setStyle("-fx-background-color: #888888; -fx-text-fill: white;");
+            dialog.getDialogPane().lookupButton(noButton).setStyle("-fx-background-color: #888888; -fx-text-fill: white;");
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.isPresent() && result.get() == yesButton) {
+                loginAction();
+                mainApp.timerScene();
+            } else {
+                System.out.println("login cancelled.");
+                registerController.reset();
+                AppContext app = AppContext.getInstance();
+                app.setAuthToken(null);
+            }
+        });
+    }
+
+
     private void exitAction() {
         System.out.println("Exit selected");
         System.exit(0);
