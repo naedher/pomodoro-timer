@@ -14,26 +14,29 @@ import javafx.scene.layout.VBox;
 
 public class LoginScene {
     private Main mainApp;
-    private TextField emailField;
-    private TextField passwordField;
-    private final LoginController loginController = new LoginController();
+    private TextField emailField; // Input field for email
+    private TextField passwordField; // Input field for password
+    private LoginController loginController = new LoginController();
 
 
     public LoginScene(Main mainApp) {
         this.mainApp = mainApp;
     }
 
+    // Creates and returns the login scene UI
     public Scene createScene() {
         Label emailLabel = new Label("Email:");
         emailField = new TextField();
         emailField.setPromptText("Email");
         emailField.setPrefWidth(140);
 
+        // Create and configure the password label and input field
         Label passwordLabel = new Label("Password:");
         passwordField = new TextField();
         passwordField.setPromptText("Password");
         passwordField.setPrefWidth(140);
 
+        // Create and configure the input grid
         GridPane inputGrid = new GridPane();
         inputGrid.setHgap(10);
         inputGrid.setVgap(10);
@@ -41,17 +44,21 @@ public class LoginScene {
         inputGrid.addRow(1, passwordLabel, passwordField);
         inputGrid.setAlignment(Pos.CENTER);
 
+        // Create and configure the buttons
         Button login = createStyledButton("Login", "#4CAF50");
         Button guest = createStyledButton("Guest mode", "#FFC107");
         Button exit = createStyledButton("Exit", "#f44336");
 
+        // Set button actions
         login.setOnAction(e -> loginAction());
         guest.setOnAction(e -> guestModeAction());
         exit.setOnAction(e -> exitAction());
 
+        // Create and configure the button box
         HBox buttonBox = new HBox(10, login, guest, exit);
         buttonBox.setAlignment(Pos.CENTER);
 
+        // Create and configure the root layout
         VBox root = new VBox(20, inputGrid, buttonBox);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
@@ -60,6 +67,7 @@ public class LoginScene {
         return new Scene(root, 350, 250);
     }
 
+    // Helper method to create a styled button
     private Button createStyledButton(String text, String color) {
         Button button = new Button(text);
         button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white;");
@@ -67,25 +75,26 @@ public class LoginScene {
         return button;
     }
 
+    // Action method for the login button
     private void loginAction() {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        // Felhantering för mail
+        // Error handling for email
         if (!isValidEmail(email)) {
             showAlert("Invalid Email", "Please enter a valid email address.");
             return;
         }
 
-        // Felhantering för lösenord
-        // Felhantering för stor bokstav, specialtecken, etc kan vi lägga till senare
+        // Error handling for password (8 < characters)
         if (password.length() < 8) {
             showAlert("Invalid Password", "Password must be at least 8 characters long");
             return;
         }
+        // Send login request
         loginController.sendLoginRequest(email, password)
                 .thenAccept(token -> {
-                     Platform.runLater(() -> mainApp.timerScene());
+                    Platform.runLater(() -> mainApp.timerScene());
                 })
                 .exceptionally(ex -> {
 
@@ -98,6 +107,7 @@ public class LoginScene {
         mainApp.timerScene();
     }
 
+    // Helper method to validate email domain
     private boolean isValidEmail(String email) {
         String[] validDomains = {"@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@icloud.com"};
         for (String domain : validDomains) {
@@ -108,6 +118,7 @@ public class LoginScene {
         return false;
     }
 
+    // Helper method to show alert dialog
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -116,11 +127,13 @@ public class LoginScene {
         alert.showAndWait();
     }
 
+    // Action method for guest mode button
     private void guestModeAction() {
         System.out.println("Guest mode selected");
         mainApp.timerScene();
     }
 
+    // Action method for exit button
     private void exitAction() {
         System.out.println("Exit selected");
         System.exit(0);

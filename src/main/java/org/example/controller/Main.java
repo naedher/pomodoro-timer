@@ -24,8 +24,8 @@ public class Main {
         main.authService = new AuthServiceImpl();
 
         // Comment out registration for the creation of an new account!
-         main.testRegister();
-         System.out.println("Register testing finished.");
+        main.testRegister();
+        System.out.println("Register testing finished.");
 
         main.testLogin();
         System.out.println("Login testing finished.");
