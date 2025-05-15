@@ -1,43 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.PomodoroController">
+<BorderPane styleClass="main-container" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.TimerController">
     <stylesheets>
         <URL value="@../style.css" />
     </stylesheets>
 
-    <VBox alignment="CENTER" spacing="20" prefWidth="350" prefHeight="500">
+    <!-- Right side - Timer List Panel -->
+    <right>
+        <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 20;" spacing="10" prefWidth="200">
+            <Label text="Saved Timers" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
+            <ListView fx:id="timerListView">
+                <placeholder>
+                    <Label text="No saved timers"/>
+                </placeholder>
+            </ListView>
+            <Button fx:id="addTimerButton" text="+"
+                    style="-fx-font-size: 16; -fx-min-width: 30; -fx-min-height: 30;"
+                    onAction="#addSavedTimer"/>
+        </VBox>
+    </right>
 
-        <!-- Dropdownmeny -->
-         <HBox alignment="TOP_RIGHT" prefWidth="350">
-             <padding>
-                 <Insets top="10" right="10" bottom="10" left="10" />
-             </padding>
-             <MenuButton fx:id="menuButton" text="⋮" styleClass="menu-btn" />
-         </HBox>
+    <!-- Main content -->
+    <center>
+        <VBox alignment="CENTER" spacing="30" styleClass="content-area">
+            <padding>
+                <Insets bottom="40" left="40" right="40" top="40" />
+            </padding>
+            <Label styleClass="header-title" text="POMODORO DESKTOP TIMER">
+                <font>
+                    <Font size="29.0" />
+                </font>
+            </Label>
 
-         <!-- Titel -->
-        <Label text="POMODORO" styleClass="title" />
+            <!-- Interval display -->
+            <Label fx:id="intervalLabel" styleClass="interval-label" text="Interval: 1/4" />
 
-        <!-- Körknappar -->
-        <HBox alignment="CENTER" spacing="10">
-            <ToggleButton text="Focus" fx:id="focusButton" onAction="#setFocus" selected="true" />
-            <ToggleButton text="Short Break" fx:id="shortBreakButton" onAction="#setShortBreak" />
-            <ToggleButton text="Long Break" fx:id="longBreakButton" onAction="#setLongBreak" />
-        </HBox>
+            <!-- Timer display -->
+            <Label fx:id="timerLabel" styleClass="timer" />
 
-        <!-- Timer -->
-        <Label fx:id="timerLabel" styleClass="timer" />
+            <!-- Mode selection -->
+            <HBox alignment="CENTER" spacing="20">
+                <ToggleButton fx:id="focusButton" onAction="#handleFocus" selected="true" styleClass="mode-button" text="Focus" />
+                <ToggleButton fx:id="shortBreakButton" onAction="#handleShortBreak" styleClass="mode-button" text="Short Break" />
+                <ToggleButton fx:id="longBreakButton" onAction="#handleLongBreak" styleClass="mode-button" text="Long Break" />
+            </HBox>
 
-        <!-- kontrollknappar -->
-        <HBox alignment="CENTER" spacing="15">
-            <Button text="START" fx:id="startButton" onAction="#startStop" styleClass="start-btn" />
-            <Button text="Reset" fx:id="resetButton" onAction="#reset" styleClass="reset-btn" />
-        </HBox>
-    </VBox>
-</AnchorPane>
+            <Button fx:id="debugButton" text="DEBUG (3s)"
+                    onAction="#handleDebug"/>
+
+            <!-- Control buttons -->
+            <HBox alignment="CENTER" spacing="25">
+                <Button fx:id="startButton" onAction="#startStop" styleClass="start-btn" text="Start" />
+                <Button fx:id="resetButton" onAction="#reset" styleClass="reset-btn" text="Reset" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
