@@ -20,7 +20,7 @@ import org.example.model.service.impl.TimerServiceImpl;
 
 import java.io.IOException;
 
-public class TimerController implements TimerCallback {
+public class TimerController {
 
     @FXML private Label timerLabel;
     @FXML private Label intervalLabel;
@@ -33,31 +33,31 @@ public class TimerController implements TimerCallback {
     @FXML private ListView<TimerDetails> timerListView;
 
     private Timeline timeline;
-    private boolean running = false;
     private int timeLeft;
-    private TimerMode currentMode = TimerMode.FOCUS;
-    private int currentInterval = 1;
+    private TimerMode currentMode;
+    private int currentInterval;
 
     private TimerDetails selectedTimer;
-    private Timer timer;
     private TimerService timerService;
-
+    private boolean running;
 
 
     @FXML
     public void initialize() {
+        this.currentMode = TimerMode.FOCUS;
+        this.currentInterval = 1;
+        this.running = false;
 
         // Create a default timer to be shown on startup
         this.selectedTimer = new TimerDetails(-1L, "Default timer", null, 25, 5, 15, 4);
+        createNewTimeline();
 
         // Create TimerService
         String token = AppContext.getInstance().getAuthToken();
         this.timerService = new TimerServiceImpl(token);
-        initListListener();
 
-        timer = new Timer(selectedTimer, this);
-        updateDisplay(timer.getTimeLeft());
-        updateIntervalDisplay();
+        initListListener();
+        update();
         updateTimerList();
     }
 
@@ -72,10 +72,11 @@ public class TimerController implements TimerCallback {
             throw new RuntimeException(e);
         }
 
-        // AddTimerController addTimerController = loader.getController();
-        // pass any data or read data when finished
+        AddTimerController addTimerController = loader.getController();
 
         Stage dialogStage = new Stage();
+        addTimerController.setStage(dialogStage);
+
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         dialogStage.setScene(new Scene(root));
         dialogStage.showAndWait(); // blocks until closed
@@ -85,7 +86,6 @@ public class TimerController implements TimerCallback {
     }
 
     private void updateTimerList() {
-
         timerService.getUserTimers()
                 .thenAccept(response -> {
                     ObservableList<TimerDetails> observableList = FXCollections.observableArrayList(response);
@@ -108,43 +108,70 @@ public class TimerController implements TimerCallback {
     // Method to start or stop the timer
     @FXML
     private void startStop() {
-        if (running) {
-            timeline.stop();
-            running = false;
-            startButton.setText("START");
+        if (!running) {
+            // start
+            start();
         } else {
-            timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-                timeLeft--;
-                updateDisplay(timeLeft);
-                if (timeLeft <= 0) handleTimerCompletion();
-            }));
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-            running = true;
-            startButton.setText("PAUSE");
+            // pause
+            stop();
         }
+    }
+
+    private void onTick() {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            onComplete();
+        } else {
+            updateDisplay();
+        }
+    }
+
+    private void initListListener() {
+        timerListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                selectedTimer = newVal;
+                timeLeft = selectedTimer.getDurationByMode(currentMode);
+            }
+            update();
+        });
+    }
+
+
+    private void stop() {
+        timeline.stop();
+        running = false;
+        startButton.setText("Start");
+    }
+
+    private void start() {
+        timeline.play();
+        running = true;
+        startButton.setText("Pause");
+    }
+
+    private void update() {
+        updateDisplay();
+        updateIntervalDisplay();
+        updateToggleButtons();
     }
 
     // Method to reset the timer
     @FXML
     private void reset() {
-        if (timeline != null) timeline.stop();
-        running = false;
-        startButton.setText("START");
-
-        timeLeft = selectedTimer.getDurationByMode(currentMode);
-
-        updateDisplay(timeLeft);
-        updateIntervalDisplay();
-        updateToggleButtons();
+        stop();
+        createNewTimeline();
+        update();
     }
 
-    // Method to handle timer completion
-    private void handleTimerCompletion() {
-        timeline.stop();
-        running = false;
-        startButton.setText("START");
+    private void createNewTimeline() {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> onTick()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeLeft = selectedTimer.getDurationByMode(currentMode);
+    }
 
+
+    // Method to handle timer completion
+    private void nextInterval() {
         if (currentMode == TimerMode.FOCUS) {
             currentInterval++;
             if (currentInterval > selectedTimer.getPomodoroCount()) {
@@ -156,8 +183,7 @@ public class TimerController implements TimerCallback {
         } else {
             currentMode = TimerMode.FOCUS;
         }
-
-        reset();
+        updateIntervalDisplay();
     }
 
     // Method to update the timer display
@@ -167,22 +193,15 @@ public class TimerController implements TimerCallback {
         timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
     }
 
-    @Override
-    public void onTick(int timeLeft) {
-        // Update the timer display with the remaining time
-        Platform.runLater(() -> {
-            int minutes = timeLeft / 60;
-            int seconds = timeLeft % 60;
-            timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
-        });
+    private void updateDisplay() {
+        updateDisplay(timeLeft);
     }
 
-    @Override
     public void onComplete() {
         // Handle timer completion logic
-        Platform.runLater(() -> {
-            handleTimerCompletion();
-        });
+        nextInterval();
+        reset();
+        start();
     }
 
     // Method to update the interval display
@@ -229,31 +248,9 @@ public class TimerController implements TimerCallback {
     @FXML
     private void handleDebug() {
         // Set timer to 3 seconds for testing
+        reset();
         timeLeft = 3;
-        updateDisplay(timeLeft);
-
-        // Auto-start the timer
-        if (!running) {
-            startStop();
-        }
+        updateDisplay();
     }
 
-    private void initListListener() {
-        timerListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                selectedTimer = newVal;
-            }
-
-            updateDisplay(selectedTimer.getDurationByMode(currentMode));
-            updateIntervalDisplay();
-        });
-    }
-
-    private int getCurrentModeDuration() {
-        return switch (currentMode) {
-            case FOCUS -> selectedTimer.getWorkDuration();
-            case LONG_BREAK -> selectedTimer.getLongBreakDuration();
-            case SHORT_BREAK -> selectedTimer.getShortBreakDuration();
-        };
-    }
 }
