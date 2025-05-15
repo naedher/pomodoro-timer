@@ -1,19 +1,19 @@
 package org.example.ui;
 
+import org.example.model.dto.TimerDetails;
+
 public class Timer {
     private TimerMode currentMode = TimerMode.FOCUS; // Default mode
-    private int totalIntervals;
+    private TimerDetails timerDetails;
     private int currentInterval = 1; // Start with the first interval
 
-    private TimerCallback callback;
     private TimerManager timerManager;
 
-    public Timer(int totalIntervals, TimerCallback callback) {
-        this.totalIntervals = totalIntervals;
-        this.callback = callback;
+    public Timer(TimerDetails timerDetails, TimerCallback callback) {
+        this.timerDetails = timerDetails;
 
         // Initialize timeManager with callback
-        this.timerManager = new TimerManager(currentMode.getDuration(), new TimerCallback() {
+        this.timerManager = new TimerManager(getCurrentModeDuration(), new TimerCallback() {
 
             // Update UI with time left
             @Override
@@ -30,11 +30,11 @@ public class Timer {
                 if (callback != null) {
                     callback.onComplete(); // Notify completion
                 }
-                timerManager.reset(currentMode.getDuration()); // update duration for new mode
+                timerManager.reset(getCurrentModeDuration()); // update duration for new mode
                 timerManager.start(); // auto-start next mode
             }
         });
-        timerManager.reset(currentMode.getDuration()); // Initialize with current mode duration
+        timerManager.reset(getCurrentModeDuration()); // Initialize with current mode duration
     }
 
     // Start the timer
@@ -49,7 +49,7 @@ public class Timer {
 
     // Reset the timer to the current mode's duration
     public void resetCurrentMode() {
-        timerManager.reset(currentMode.getDuration());
+        timerManager.reset(getCurrentModeDuration());
     }
 
     // Reset the timer to the initial state
@@ -80,13 +80,13 @@ public class Timer {
     }
 
     public int getTotalIntervals() {
-        return totalIntervals;
+        return timerDetails.getPomodoroCount();
     }
 
     // Called when a timer finishes
     public void handleTimerComplete() {
         if (currentMode == TimerMode.FOCUS) {
-            if (currentInterval < totalIntervals) { // Check if we are not at the last interval
+            if (currentInterval < timerDetails.getPomodoroCount()) { // Check if we are not at the last interval
                 currentInterval++;
                 setMode(TimerMode.SHORT_BREAK);
             } else {
@@ -98,5 +98,13 @@ public class Timer {
             }
             setMode(TimerMode.FOCUS); // Switch back to focus mode
         }
+    }
+
+    private int getCurrentModeDuration() {
+        return switch (currentMode) {
+            case FOCUS -> timerDetails.getWorkDuration();
+            case LONG_BREAK -> timerDetails.getLongBreakDuration();
+            case SHORT_BREAK -> timerDetails.getShortBreakDuration();
+        };
     }
 }

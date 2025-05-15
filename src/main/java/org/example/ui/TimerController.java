@@ -3,14 +3,22 @@ package org.example.ui;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.model.AppContext;
-import org.example.model.TimerEntity;
-import org.example.model.dto.TimerCreate;
-import org.json.JSONObject;
-import java.util.concurrent.CompletableFuture;
+import org.example.model.dto.TimerDetails;
+import org.example.model.service.TimerService;
+import org.example.model.service.impl.TimerServiceImpl;
+
+import java.io.IOException;
 
 public class TimerController implements TimerCallback {
 
@@ -22,7 +30,7 @@ public class TimerController implements TimerCallback {
     @FXML private ToggleButton shortBreakButton;
     @FXML private ToggleButton longBreakButton;
 
-    @FXML private ListView<TimerCreate> timerListView;
+    @FXML private ListView<TimerDetails> timerListView;
 
     private Timeline timeline;
     private boolean running = false;
@@ -30,92 +38,63 @@ public class TimerController implements TimerCallback {
     private TimerMode currentMode = TimerMode.FOCUS;
     private int currentInterval = 1;
 
-    private TimerEntity defaultTimer;
+    private TimerDetails selectedTimer;
     private Timer timer;
-
-
+    private TimerService timerService;
 
 
 
     @FXML
     public void initialize() {
 
-        this.defaultTimer = new TimerEntity(-1L, "Default timer", 25, 5, 15, 4);
-        timer = new Timer(4, this);
+        // Create a default timer to be shown on startup
+        this.selectedTimer = new TimerDetails(-1L, "Default timer", null, 25, 5, 15, 4);
+
+        // Create TimerService
+        String token = AppContext.getInstance().getAuthToken();
+        this.timerService = new TimerServiceImpl(token);
+        initListListener();
+
+        timer = new Timer(selectedTimer, this);
         updateDisplay(timer.getTimeLeft());
         updateIntervalDisplay();
+        updateTimerList();
     }
 
     @FXML
     private void addSavedTimer() {
-        // Create input dialog
-        TextInputDialog dialog = new TextInputDialog("Work/25/5/15/4");
-        dialog.setTitle("Add Timer Preset");
-        dialog.setHeaderText("Enter timer in format:");
-        dialog.setContentText("Name/FocusMinutes/ShortBreak/LongBreak/Intervals");
+        // Load AddTimer dialogue
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/AddTimer.fxml"));
+        Parent root;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        dialog.showAndWait().ifPresent(input -> {
-            try {
-                String[] parts = input.split("/");
-                TimerCreate timerCreate = new TimerCreate(
-                        parts[0],
-                        Integer.parseInt(parts[1]) * 60, // Convert to seconds
-                        Integer.parseInt(parts[2]) * 60,
-                        Integer.parseInt(parts[3]) * 60,
-                        Integer.parseInt(parts[4])
-                );
+        // AddTimerController addTimerController = loader.getController();
+        // pass any data or read data when finished
 
-                saveTimer(timerCreate);
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.setScene(new Scene(root));
+        dialogStage.showAndWait(); // blocks until closed
 
-            } catch (Exception e) {
-                showAlert("Error", "Invalid format. Example: Work/25/5/15/4");
-            }
-        });
+        // Update the list
+        updateTimerList();
     }
 
-    public CompletableFuture<Void> saveTimer(TimerCreate timer) {
-        try {
+    private void updateTimerList() {
 
-            String currentToken = AppContext.getInstance().getAuthToken();
-            if (currentToken == null || currentToken.isEmpty()) {
-                throw new IllegalStateException("Not authenticated - please login again");
-            }
-
-            apiClient.setToken(currentToken);
-
-            JSONObject json = new JSONObject();
-            json.put("name", timer.getName());
-            json.put("workDuration", timer.getWorkDuration());
-            json.put("shortBreakDuration", timer.getShortBreakDuration());
-            json.put("longBreakDuration", timer.getLongBreakDuration());
-            json.put("pomodoroCount", timer.getPomodoroCount());
-
-            System.out.println("Saving timer with token: " + currentToken);
-            System.out.println("Request body: " + json.toString());
-
-            return apiClient.post("api/timers", json.toString())
-                    .thenAccept(response -> {
-                        System.out.println("Save successful: " + response);
-                        Platform.runLater(() -> {
-                            timerListView.getItems().add(timer);
-                            showAlert("Success", "Timer saved successfully!");
-                        });
-                    })
-                    .exceptionally(ex -> {
-                        System.err.println("Save failed: " + ex.getMessage());
-                        Platform.runLater(() ->
-                                showAlert("Error", "Failed to save timer: " +
-                                        (ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage()))
-                        );
-                        return null;
-                    });
-
-        } catch (Exception e) {
-            Platform.runLater(() ->
-                    showAlert("Error", "Failed to prepare timer: " + e.getMessage())
-            );
-            return CompletableFuture.failedFuture(e);
-        }
+        timerService.getUserTimers()
+                .thenAccept(response -> {
+                    ObservableList<TimerDetails> observableList = FXCollections.observableArrayList(response);
+                    timerListView.setItems(observableList);
+                }).exceptionally(compException -> {
+                    Throwable ex = compException.getCause();
+                    showAlert("List update error", ex.getMessage());
+                    return null;
+                });
     }
 
     private void showAlert(String title, String message) {
@@ -153,11 +132,7 @@ public class TimerController implements TimerCallback {
         running = false;
         startButton.setText("START");
 
-        switch (currentMode) {
-            case FOCUS -> timeLeft = focusTime;
-            case SHORT_BREAK -> timeLeft = shortBreakTime;
-            case LONG_BREAK -> timeLeft = longBreakTime;
-        }
+        timeLeft = selectedTimer.getDurationByMode(currentMode);
 
         updateDisplay(timeLeft);
         updateIntervalDisplay();
@@ -172,7 +147,7 @@ public class TimerController implements TimerCallback {
 
         if (currentMode == TimerMode.FOCUS) {
             currentInterval++;
-            if (currentInterval > totalIntervals) {
+            if (currentInterval > selectedTimer.getPomodoroCount()) {
                 currentInterval = 1;
                 currentMode = TimerMode.LONG_BREAK;
             } else {
@@ -212,7 +187,7 @@ public class TimerController implements TimerCallback {
 
     // Method to update the interval display
     private void updateIntervalDisplay() {
-        intervalLabel.setText(String.format("Interval: %d/%d", currentInterval, totalIntervals));
+        intervalLabel.setText(String.format("Interval: %d/%d", currentInterval, selectedTimer.getPomodoroCount()));
     }
 
     // Method to update the toggle buttons based on the current mode
@@ -261,5 +236,24 @@ public class TimerController implements TimerCallback {
         if (!running) {
             startStop();
         }
+    }
+
+    private void initListListener() {
+        timerListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                selectedTimer = newVal;
+            }
+
+            updateDisplay(selectedTimer.getDurationByMode(currentMode));
+            updateIntervalDisplay();
+        });
+    }
+
+    private int getCurrentModeDuration() {
+        return switch (currentMode) {
+            case FOCUS -> selectedTimer.getWorkDuration();
+            case LONG_BREAK -> selectedTimer.getLongBreakDuration();
+            case SHORT_BREAK -> selectedTimer.getShortBreakDuration();
+        };
     }
 }

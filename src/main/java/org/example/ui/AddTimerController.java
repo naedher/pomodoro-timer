@@ -6,10 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.example.exceptions.HttpException;
 import org.example.model.AppContext;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.TimerService;
 import org.example.model.service.impl.TimerServiceImpl;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class AddTimerController {
@@ -27,14 +30,14 @@ public class AddTimerController {
     private void initialize() {
         String token = AppContext.getInstance().getAuthToken();
         this.timerService = new TimerServiceImpl(token);
+
+        createButton.setOnAction(e -> handleCreate());
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-
-    @FXML
     private void handleCreate() {
         TimerCreate request = new TimerCreate(
                 nameField.getText(),
@@ -44,14 +47,9 @@ public class AddTimerController {
                 intervalSpinner.getValue()
         );
 
-        try {
-            timerService.createTimer(request);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
+        timerService.createTimer(request).join(); // missing error handling for now
+        stage.close();
     }
-
 
 
 }
