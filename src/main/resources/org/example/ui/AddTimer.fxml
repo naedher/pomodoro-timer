@@ -9,8 +9,8 @@
 
 <AnchorPane prefHeight="382.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.AddTimerController">
    <children>
-      <TextField layoutX="98.0" layoutY="74.0" />
-      <Button layoutX="146.0" layoutY="331.0" mnemonicParsing="false" text="Create" />
+      <TextField fx:id="nameField" layoutX="98.0" layoutY="74.0" />
+      <Button fx:id="createButton" layoutX="146.0" layoutY="331.0" mnemonicParsing="false" text="Create" />
       <Text layoutX="98.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
       <Text layoutX="98.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Work Time" />
       <Text layoutX="98.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Short Break Time" />
@@ -21,9 +21,9 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <Spinner id="workTimeSpinner" editable="true" layoutX="98.0" layoutY="125.0" />
-      <Spinner id="shortBreakTimeSpinner" editable="true" layoutX="98.0" layoutY="179.0" />
-      <Spinner id="longBreakTimeSpinner" editable="true" layoutX="98.0" layoutY="231.0" />
-      <Spinner id="intevalSpinner" editable="true" layoutX="98.0" layoutY="288.0" />
+      <Spinner id="workTimeSpinner" fx:id="workTimeSpinner" editable="true" layoutX="98.0" layoutY="125.0" />
+      <Spinner id="shortBreakTimeSpinner" fx:id="shortBreakTimeSpinner" editable="true" layoutX="98.0" layoutY="179.0" />
+      <Spinner id="longBreakTimeSpinner" fx:id="longBreakTimeSpinner" editable="true" layoutX="98.0" layoutY="231.0" />
+      <Spinner id="intevalSpinner" fx:id="intervalSpinner" editable="true" layoutX="98.0" layoutY="288.0" />
    </children>
 </AnchorPane>
