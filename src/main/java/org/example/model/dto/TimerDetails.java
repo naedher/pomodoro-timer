@@ -1,6 +1,7 @@
 package org.example.model.dto;
 
 import org.example.ui.TimerMode;
+import org.example.utils.Utils;
 
 import java.time.LocalDateTime;
 
@@ -91,10 +92,17 @@ public class TimerDetails {
     }
 
     public int getDurationByMode(TimerMode timerMode) {
-        return switch (timerMode) {
+        int minutes =  switch (timerMode) {
             case FOCUS -> getWorkDuration();
             case LONG_BREAK -> getLongBreakDuration();
             case SHORT_BREAK -> getShortBreakDuration();
         };
+
+        return Utils.minutesToSeconds(minutes);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
