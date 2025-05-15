@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.exceptions.HttpException;
@@ -30,8 +31,21 @@ public class AddTimerController {
     private void initialize() {
         String token = AppContext.getInstance().getAuthToken();
         this.timerService = new TimerServiceImpl(token);
+        initSpinners();
 
         createButton.setOnAction(e -> handleCreate());
+    }
+
+    private void initSpinners() {
+        addSpinnerValueFactory(workTimeSpinner, 5, 999);
+        addSpinnerValueFactory(shortBreakTimeSpinner, 1, 999);
+        addSpinnerValueFactory(longBreakTimeSpinner, 1, 999);
+        addSpinnerValueFactory(intervalSpinner, 1, 999);
+    }
+
+    private void addSpinnerValueFactory(Spinner<Integer> spinner, int lower, int upper) {
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(lower, upper));
+
     }
 
     public void setStage(Stage stage) {
@@ -50,6 +64,4 @@ public class AddTimerController {
         timerService.createTimer(request).join(); // missing error handling for now
         stage.close();
     }
-
-
 }
