@@ -32,8 +32,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public CompletableFuture<String> register(AuthRequest authRequest) throws JsonProcessingException {
-        String jsonBody = mapper.writeValueAsString(authRequest);
+    public CompletableFuture<String> register(AuthRequest authRequest) {
+        String jsonBody;
+        try {
+            jsonBody = mapper.writeValueAsString(authRequest);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         return apiClient.post("/auth/register", jsonBody)
                 .thenApply(response -> {
                     try {
