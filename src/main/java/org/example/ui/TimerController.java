@@ -1,28 +1,18 @@
 package org.example.ui;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.util.Duration;
-import org.example.infrastructure.ApiClient;
 import org.example.model.AppContext;
+import org.example.model.TimerEntity;
 import org.example.model.dto.TimerCreate;
-import org.example.ui.TimerMode;
 import org.json.JSONObject;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
-public class TimerController implements TimerCallback{
+public class TimerController implements TimerCallback {
 
     @FXML private Label timerLabel;
     @FXML private Label intervalLabel;
@@ -40,19 +30,17 @@ public class TimerController implements TimerCallback{
     private TimerMode currentMode = TimerMode.FOCUS;
     private int currentInterval = 1;
 
-    private int focusTime = 25 * 60;
-    private int shortBreakTime = 5 * 60;
-    private int longBreakTime = 15 * 60;
-    private int totalIntervals = 4;
-
+    private TimerEntity defaultTimer;
     private Timer timer;
 
-    private ApiClient apiClient;
+
+
+
 
     @FXML
     public void initialize() {
 
-        apiClient = new ApiClient(AppContext.getInstance().getAuthToken());
+        this.defaultTimer = new TimerEntity(-1L, "Default timer", 25, 5, 15, 4);
         timer = new Timer(4, this);
         updateDisplay(timer.getTimeLeft());
         updateIntervalDisplay();
