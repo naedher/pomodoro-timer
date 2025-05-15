@@ -1,5 +1,7 @@
 package org.example.model.dto;
 
+import org.example.ui.TimerMode;
+
 import java.time.LocalDateTime;
 
 public class TimerDetails {
@@ -86,5 +88,13 @@ public class TimerDetails {
 
     public void setPomodoroCount(Integer pomodoroCount) {
         this.pomodoroCount = pomodoroCount;
+    }
+
+    public int getDurationByMode(TimerMode timerMode) {
+        return switch (timerMode) {
+            case FOCUS -> getWorkDuration();
+            case LONG_BREAK -> getLongBreakDuration();
+            case SHORT_BREAK -> getShortBreakDuration();
+        };
     }
 }
