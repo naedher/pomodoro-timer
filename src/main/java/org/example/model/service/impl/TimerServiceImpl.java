@@ -55,15 +55,25 @@ public class TimerServiceImpl implements TimerService {
     }
 
     @Override
-    public CompletableFuture<Void> createTimer(TimerCreate timer) throws JsonProcessingException {
-        String jsonBody = mapper.writeValueAsString(timer);
+    public CompletableFuture<Void> createTimer(TimerCreate timer) {
+        String jsonBody;
+        try {
+            jsonBody = mapper.writeValueAsString(timer);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         apiClient.post("/timers", jsonBody);
         return CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public CompletableFuture<Void> updateTimer(long id, TimerUpdate request) throws JsonProcessingException {
-        String jsonBody = mapper.writeValueAsString(request);
+    public CompletableFuture<Void> updateTimer(long id, TimerUpdate request) {
+        String jsonBody;
+        try {
+            jsonBody = mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         apiClient.put("/timers/" + id, jsonBody);
         return CompletableFuture.completedFuture(null);
     }
