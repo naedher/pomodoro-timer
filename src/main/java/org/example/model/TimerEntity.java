@@ -1,34 +1,22 @@
-package org.example.model.dto;
-
-import org.example.ui.TimerMode;
-import org.example.utils.Utils;
+package org.example.model;
 
 import java.time.LocalDateTime;
 
-public class TimerDetails {
-    private Long id;
+public class TimerEntity {
+
+    private long id;
     private String name;
     private LocalDateTime createdAt;
-    private Integer workDuration;
-    private Integer shortBreakDuration;
-    private Integer longBreakDuration;
-    private Integer pomodoroCount;
+    private int workDuration;
+    private int shortBreakDuration;
+    private int longBreakDuration;
+    private int pomodoroCount;
 
-    // Default constructor needed for JSON deserialization
-    public TimerDetails() { }
 
-    public TimerDetails(
-            Long id,
-            String name,
-            LocalDateTime createdAt,
-            Integer workDuration,
-            Integer shortBreakDuration,
-            Integer longBreakDuration,
-            Integer pomodoroCount
-    ) {
+    public TimerEntity(long id, String name, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
         this.id = id;
         this.name = name;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
         this.workDuration = workDuration;
         this.shortBreakDuration = shortBreakDuration;
         this.longBreakDuration = longBreakDuration;
@@ -89,20 +77,4 @@ public class TimerDetails {
 
     public void setPomodoroCount(Integer pomodoroCount) {
         this.pomodoroCount = pomodoroCount;
-    }
-
-    public int getDurationByMode(TimerMode timerMode) {
-        int minutes =  switch (timerMode) {
-            case FOCUS -> getWorkDuration();
-            case LONG_BREAK -> getLongBreakDuration();
-            case SHORT_BREAK -> getShortBreakDuration();
-        };
-
-        return Utils.minutesToSeconds(minutes);
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-}
+    }}

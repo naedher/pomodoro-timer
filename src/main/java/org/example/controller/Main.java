@@ -24,28 +24,26 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
         main.authService = new AuthServiceImpl();
-//        Comment out registration for the creation of an new account!
-//         main.testRegister();
-//         System.out.println("Register testing finished.");
+
+        // Comment out registration for the creation of an new account!
+        main.testRegister();
+        System.out.println("Register testing finished.");
 
         main.testLogin();
         System.out.println("Login testing finished.");
 
         //only if login was successful!!
         if (main.timerService != null) {
-
+            // Done
             main.testCreateTimer();
             System.out.println("Create timer testing finished.");
 
             main.testGetTimerDetails();
             System.out.println("Get timer details testing finished.");
 
-            main.testGetUserTimers();
-            System.out.println("Get user timers testing finished.");
-
             main.testUpdateTimer();
             System.out.println("Update timer testing finished.");
-
+            // Done
             main.testDeleteTimer();
             System.out.println("Delete timer testing finished.");
         } else {
@@ -168,7 +166,7 @@ public class Main {
         timersFuture.thenAccept(timers -> {
             System.out.println("User timers retrieved successfully!");
             System.out.println("Number of timers: " + timers.size());
-            
+
             for (TimerDetails timer : timers) {
                 System.out.println("\n----------------------------------------");
                 System.out.println("Timer ID: " + timer.getId());
