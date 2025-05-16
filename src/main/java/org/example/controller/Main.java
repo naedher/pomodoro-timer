@@ -57,11 +57,7 @@ public class Main {
     public void testRegister() {
         System.out.println("Testing registration...");
         CompletableFuture<String> registerFuture = null;
-        try {
-            registerFuture = authService.register(new AuthRequest("test123456@example.com", "testpassword"));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        registerFuture = authService.register(new AuthRequest("test123456@example.com", "testpassword"));
 
         registerFuture.thenAccept(token -> {
             System.out.println("Registration successful! Token: " + token.substring(0, 10) + "...");
@@ -120,11 +116,7 @@ public class Main {
                 ", pomodoroCount=" + pomodoroCount);
 
         CompletableFuture<Void> createFuture = null;
-        try {
-            createFuture = timerService.createTimer(new TimerCreate(name, workDuration, shortBreakDuration, longBreakDuration, pomodoroCount));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        createFuture = timerService.createTimer(new TimerCreate(name, workDuration, shortBreakDuration, longBreakDuration, pomodoroCount));
         createFuture.thenAccept(v -> {
             System.out.println("Timer created successfully!");
         }).exceptionally(throwable -> {
@@ -216,12 +208,7 @@ public class Main {
 
         // Call updateTimer once and handle the result properly
         CompletableFuture<Void> updateFuture = null;
-        try {
-            updateFuture = timerService.updateTimer(timerId, update);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        updateFuture = timerService.updateTimer(timerId, update);
 
         updateFuture.thenAccept(v -> {
             System.out.println("Timer updated successfully!");
