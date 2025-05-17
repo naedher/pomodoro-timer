@@ -169,8 +169,6 @@ public class LoginScene {
             }
         });
     }
-
-
     private void exitAction() {
         System.out.println("Exit selected");
         System.exit(0);
