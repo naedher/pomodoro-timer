@@ -13,5 +13,5 @@ public interface TimerService {
     CompletableFuture<Void> createTimer(TimerCreate timer);
     CompletableFuture<Void> updateTimer(long id, TimerUpdate request);
     CompletableFuture<Void> deleteTimer(long id);
-    //CompletableFuture<List<TimerDetails>> getUserTimers();
+    CompletableFuture<List<TimerDetails>> getUserTimers();
 }
