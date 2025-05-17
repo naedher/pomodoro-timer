@@ -1,19 +1,15 @@
 package org.example.ui;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.exceptions.HttpException;
 import org.example.model.AppContext;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.TimerService;
-import org.example.model.service.impl.TimerServiceImpl;
-
-import java.util.concurrent.TimeUnit;
+import org.example.model.service.impl.RemoteTimerService;
 
 
 public class AddTimerController {
@@ -30,7 +26,7 @@ public class AddTimerController {
     @FXML
     private void initialize() {
         String token = AppContext.getInstance().getAuthToken();
-        this.timerService = new TimerServiceImpl(token);
+        this.timerService = new RemoteTimerService(token);
         initSpinners();
 
         createButton.setOnAction(e -> handleCreate());

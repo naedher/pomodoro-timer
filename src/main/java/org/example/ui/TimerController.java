@@ -2,7 +2,6 @@ package org.example.ui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,7 +15,7 @@ import javafx.util.Duration;
 import org.example.model.AppContext;
 import org.example.model.dto.TimerDetails;
 import org.example.model.service.TimerService;
-import org.example.model.service.impl.TimerServiceImpl;
+import org.example.model.service.impl.RemoteTimerService;
 
 import java.io.IOException;
 
@@ -54,7 +53,7 @@ public class TimerController {
 
         // Create TimerService
         String token = AppContext.getInstance().getAuthToken();
-        this.timerService = new TimerServiceImpl(token);
+        this.timerService = new RemoteTimerService(token);
 
         initListListener();
         update();

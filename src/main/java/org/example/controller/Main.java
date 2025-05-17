@@ -7,17 +7,16 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.concurrent.CompletableFuture;
 import java.util.List;
 
-import org.example.infrastructure.ApiClient;
 import org.example.model.dto.AuthRequest;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.impl.AuthServiceImpl;
-import org.example.model.service.impl.TimerServiceImpl;
+import org.example.model.service.impl.RemoteTimerService;
 import org.example.model.dto.TimerUpdate;
 import org.example.model.dto.TimerDetails;
 
 public class Main {
     private AuthServiceImpl authService;
-    private TimerServiceImpl timerService;
+    private RemoteTimerService timerService;
     private String authToken;
     private ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
@@ -60,7 +59,7 @@ public class Main {
         registerFuture.thenAccept(token -> {
             System.out.println("Registration successful! Token: " + token.substring(0, 10) + "...");
             this.authToken = token;
-            this.timerService = new TimerServiceImpl(token);
+            this.timerService = new RemoteTimerService(token);
         }).exceptionally(throwable -> {
             System.out.println("Registration failed: " + throwable.getMessage());
             return null;
@@ -81,7 +80,7 @@ public class Main {
         loginFuture.thenAccept(token -> {
             System.out.println("Login successful! Token: " + token.substring(0, 10) + "...");
             this.authToken = token;
-            this.timerService = new TimerServiceImpl(token);
+            this.timerService = new RemoteTimerService(token);
 
             // Print the token for debugging...
             System.out.println("Full token for debugging: " + token);
