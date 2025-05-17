@@ -30,6 +30,7 @@ public class InMemoryTimerService implements TimerService {
 
     @Override
     public CompletableFuture<Void> createTimer(TimerCreate req) {
+        return CompletableFuture.runAsync(() -> {
         long id = seq.getAndIncrement();
         TimerDetails dto = new TimerDetails(
                 id,
@@ -41,7 +42,8 @@ public class InMemoryTimerService implements TimerService {
                 req.getPomodoroCount()
         );
         store.put(id, dto);
-        return CompletableFuture.completedFuture(null);
+            System.out.println("debugg, InMem → stored, size=" + store.size());
+        });
     }
 
     @Override

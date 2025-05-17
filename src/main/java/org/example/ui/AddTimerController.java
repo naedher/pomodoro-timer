@@ -7,6 +7,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.model.AppContext;
+import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.TimerService;
 import org.example.model.service.impl.RemoteTimerService;
@@ -21,7 +22,8 @@ public class AddTimerController {
     @FXML private Button createButton;
 
     private Stage stage;
-    private TimerService timerService;
+    // i did not understand this, this needs to be final,
+    private TimerService timerService = TimerServiceFactory.get();
 
     @FXML
     private void initialize() {
@@ -56,7 +58,6 @@ public class AddTimerController {
                 longBreakTimeSpinner.getValue(),
                 intervalSpinner.getValue()
         );
-
         timerService.createTimer(request).join(); // missing error handling for now
         stage.close();
     }
