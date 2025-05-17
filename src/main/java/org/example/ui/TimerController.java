@@ -13,9 +13,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.model.AppContext;
+import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
 import org.example.model.service.TimerService;
-import org.example.model.service.impl.RemoteTimerService;
+
 
 import java.io.IOException;
 
@@ -53,7 +54,9 @@ public class TimerController {
 
         // Create TimerService
         String token = AppContext.getInstance().getAuthToken();
-        this.timerService = new RemoteTimerService(token);
+        //this.timerService = new RemoteTimerService(token);
+        // we simply get factory class here, it choose which logic will work.
+        this.timerService = TimerServiceFactory.get();
 
         initListListener();
         update();

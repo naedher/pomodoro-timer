@@ -29,4 +29,5 @@ public class AppContext {
         if (guestMode) this.authToken = null;   // we need to disable authentication for guestmode
     }
 
+
 }
