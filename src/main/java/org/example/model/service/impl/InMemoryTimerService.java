@@ -12,9 +12,10 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-
+//This class handles the timer crud operations locally within the application
 public class InMemoryTimerService implements TimerService {
     private final Map<Long, TimerDetails> store = new ConcurrentHashMap<>();
+    //Atomic long ID is a clever way of storing IDs, thread-safe
     private final AtomicLong seq = new AtomicLong(1);
 
     @Override
