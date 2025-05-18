@@ -70,7 +70,7 @@ public class ApiClient {
         }
     }
 
-    public CompletableFuture<Void> put(String path, String body) {
+    public CompletableFuture<String> put(String path, String body) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(BASE_URL.resolve(path))
@@ -82,7 +82,7 @@ public class ApiClient {
             return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(resp -> {
                         if (resp.statusCode() >= 200 && resp.statusCode() < 300) {
-                            return null;
+                            return resp.body();
                         }
                         throw HttpExceptionFactory.getHttpException(resp.statusCode(), resp.body());
                     });

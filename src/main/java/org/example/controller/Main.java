@@ -113,8 +113,7 @@ public class Main {
                 ", longBreakDuration=" + longBreakDuration +
                 ", pomodoroCount=" + pomodoroCount);
 
-        CompletableFuture<Void> createFuture = null;
-        createFuture = timerService.createTimer(new TimerCreate(name, workDuration, shortBreakDuration, longBreakDuration, pomodoroCount));
+        CompletableFuture<TimerDetails> createFuture = timerService.createTimer(new TimerCreate(name, workDuration, shortBreakDuration, longBreakDuration, pomodoroCount));
         createFuture.thenAccept(v -> {
             System.out.println("Timer created successfully!");
         }).exceptionally(throwable -> {
@@ -205,8 +204,7 @@ public class Main {
                 ", pomodoroCount=" + update.getPomodoroCount());
 
         // Call updateTimer once and handle the result properly
-        CompletableFuture<Void> updateFuture = null;
-        updateFuture = timerService.updateTimer(timerId, update);
+        CompletableFuture<TimerDetails> updateFuture = timerService.updateTimer(timerId, update);
 
         updateFuture.thenAccept(v -> {
             System.out.println("Timer updated successfully!");
