@@ -59,13 +59,12 @@ public class TimerServiceImpl implements TimerService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        return apiClient.post("/timers", jsonBody)
-                .thenApply(response -> {
-                    try {
-                        return mapper.readValue(response, TimerDetails.class);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
+        return apiClient.postWithHeaders("/timers", jsonBody)
+                .thenCompose(resp -> {
+                    String location = resp.headers().firstValue("location")
+                        .orElseThrow(() -> new RuntimeException("No Location header in response"));
+                    String id = location.substring(location.lastIndexOf('/') + 1);
+                    return getTimerDetails(Long.parseLong(id));
                 });
     }
 
@@ -78,7 +77,13 @@ public class TimerServiceImpl implements TimerService {
             throw new RuntimeException(e);
         }
         return apiClient.put("/timers/" + id, jsonBody)
-                .thenCompose(v -> getTimerDetails(id));
+                .thenApply(response -> {
+                    try {
+                        return mapper.readValue(response, TimerDetails.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override
