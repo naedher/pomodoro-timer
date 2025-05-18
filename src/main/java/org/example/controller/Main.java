@@ -46,6 +46,9 @@ public class Main {
             // Done
             main.testDeleteTimer();
             System.out.println("Delete timer testing finished.");
+
+            main.testGetUserTimers();
+            System.out.println("Get user timers testing finished.");
         } else {
             System.out.println("Timer operations skipped due to failed authentication.");
         }
