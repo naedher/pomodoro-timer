@@ -2,7 +2,6 @@ package org.example.ui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,6 +16,10 @@ import org.example.model.AppContext;
 import org.example.model.dto.TimerDetails;
 import org.example.model.service.TimerService;
 import org.example.model.service.impl.TimerServiceImpl;
+
+import javax.sound.sampled.*;
+import java.io.*;
+
 
 import java.io.IOException;
 
@@ -186,6 +189,26 @@ public class TimerController {
         updateIntervalDisplay();
     }
 
+    private void playAlarmSound() {
+        try {
+            // Load the sound file from the classpath
+            InputStream audio = getClass().getResourceAsStream("/sound/alarm1.wav");
+            // If there's no sound file
+            if (audio == null) {
+                System.err.println("Sound file not found");
+                return;
+            }
+            // Create buffered stream for efficiency
+            InputStream bufferedIn = new BufferedInputStream(audio);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn); // Create audio input stream
+            Clip clip = AudioSystem.getClip(); // Create a clip to play the sound
+            clip.open(audioStream); // Open the audio input stream
+            clip.start(); // Start playing the sound
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Method to update the timer display
     private void updateDisplay(int timeLeft) {
         int minutes = timeLeft / 60;
@@ -199,9 +222,10 @@ public class TimerController {
 
     public void onComplete() {
         // Handle timer completion logic
-        nextInterval();
-        reset();
-        start();
+        playAlarmSound(); // Play the sound when timer completes
+        nextInterval(); // Move to the next interval (Focus, Short Break, etc.)
+        reset(); // Reset timer for the new interval
+        start(); // Automatically start the next session
     }
 
     // Method to update the interval display
