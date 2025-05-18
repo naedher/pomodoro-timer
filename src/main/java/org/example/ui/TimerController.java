@@ -2,6 +2,7 @@ package org.example.ui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -89,15 +90,17 @@ public class TimerController {
 
     private void updateTimerList() {
         timerService.getUserTimers()
-                .thenAccept(response -> {
-                    ObservableList<TimerDetails> observableList = FXCollections.observableArrayList(response);
-                    timerListView.setItems(observableList);
-                }).exceptionally(compException -> {
-                    Throwable ex = compException.getCause();
-                    showAlert("List update error", ex.getMessage());
+                .thenAccept(list -> Platform.runLater(() -> {
+                    timerListView.setItems(
+                            FXCollections.observableArrayList(list));
+                }))
+                .exceptionally(ex -> {
+                    Platform.runLater(() ->
+                            showAlert("List update error", ex.getCause().getMessage()));
                     return null;
                 });
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
