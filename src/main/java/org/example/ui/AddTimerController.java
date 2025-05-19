@@ -1,19 +1,19 @@
 package org.example.ui;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.exceptions.HttpException;
 import org.example.model.AppContext;
+import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.TimerService;
-import org.example.model.service.impl.TimerServiceImpl;
+import org.example.model.service.impl.RemoteTimerService;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutionException;
 
 
 public class AddTimerController {
@@ -25,14 +25,11 @@ public class AddTimerController {
     @FXML private Button createButton;
 
     private Stage stage;
-    private TimerService timerService;
+    private final TimerService timerService = TimerServiceFactory.get();
 
     @FXML
     private void initialize() {
-        String token = AppContext.getInstance().getAuthToken();
-        this.timerService = new TimerServiceImpl(token);
         initSpinners();
-
         createButton.setOnAction(e -> handleCreate());
     }
 
@@ -60,8 +57,11 @@ public class AddTimerController {
                 longBreakTimeSpinner.getValue(),
                 intervalSpinner.getValue()
         );
-
-        timerService.createTimer(request).join(); // missing error handling for now
+        try {
+            timerService.createTimer(request).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         stage.close();
     }
 }

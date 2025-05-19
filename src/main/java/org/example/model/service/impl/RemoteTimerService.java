@@ -12,12 +12,12 @@ import org.example.model.service.TimerService;
 import java.util.concurrent.CompletableFuture;
 import java.util.List;
 
-public class TimerServiceImpl implements TimerService {
+public class RemoteTimerService implements TimerService {
     private final ApiClient apiClient;
     private ObjectMapper mapper;
 
 
-    public TimerServiceImpl(String token) {
+    public RemoteTimerService(String token) {
         this.apiClient = new ApiClient(token);
         this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
@@ -57,7 +57,7 @@ public class TimerServiceImpl implements TimerService {
         try {
             jsonBody = mapper.writeValueAsString(timer);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return CompletableFuture.failedFuture(e);
         }
         return apiClient.postWithHeaders("/timers", jsonBody)
                 .thenCompose(resp -> {
@@ -74,7 +74,7 @@ public class TimerServiceImpl implements TimerService {
         try {
             jsonBody = mapper.writeValueAsString(request);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return CompletableFuture.failedFuture(e);
         }
         return apiClient.put("/timers/" + id, jsonBody)
                 .thenApply(response -> {

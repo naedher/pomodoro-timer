@@ -53,13 +53,15 @@ public class LoginScene {
 
         Button login = createStyledButton("Login", "#888888");
         Button creatAcc = createStyledButton("New Account", "#888888");
+        Button guestMode = createStyledButton("Guest Mode", "#888888");
         Button exit = createStyledButton("Exit", "#888888");
 
         login.setOnAction(e -> loginAction());
         creatAcc.setOnAction(e -> newAccAction());
+        guestMode.setOnAction(e -> onGuestClick());
         exit.setOnAction(e -> exitAction());
 
-        HBox buttonBox = new HBox(10, login, creatAcc, exit);
+        HBox buttonBox = new HBox(10, login, creatAcc,guestMode, exit);
         buttonBox.setAlignment(Pos.CENTER);
 
         VBox root = new VBox(20,titleLabel, inputGrid, buttonBox);
@@ -135,6 +137,7 @@ public class LoginScene {
 
     }
 
+
     public void registrationSuccess() {
 
         Platform.runLater(() -> {
@@ -166,10 +169,12 @@ public class LoginScene {
             }
         });
     }
-
-
     private void exitAction() {
         System.out.println("Exit selected");
         System.exit(0);
+    }
+    private void onGuestClick() {
+        AppContext.getInstance().setGuestMode(true);
+        mainApp.timerScene();
     }
 }

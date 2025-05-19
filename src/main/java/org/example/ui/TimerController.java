@@ -13,9 +13,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.model.AppContext;
+import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
 import org.example.model.service.TimerService;
-import org.example.model.service.impl.TimerServiceImpl;
+
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -56,8 +57,8 @@ public class TimerController {
         createNewTimeline();
 
         // Create TimerService
-        String token = AppContext.getInstance().getAuthToken();
-        this.timerService = new TimerServiceImpl(token);
+        // we simply get factory class here, it choose which logic will work.
+        this.timerService = TimerServiceFactory.get();
 
         initListListener();
         update();
@@ -88,17 +89,19 @@ public class TimerController {
         updateTimerList();
     }
 
-    private void updateTimerList() {
+    protected void updateTimerList() {
         timerService.getUserTimers()
-                .thenAccept(response -> {
-                    ObservableList<TimerDetails> observableList = FXCollections.observableArrayList(response);
-                    timerListView.setItems(observableList);
-                }).exceptionally(compException -> {
-                    Throwable ex = compException.getCause();
-                    showAlert("List update error", ex.getMessage());
+                .thenAccept(list -> Platform.runLater(() -> {
+                    timerListView.setItems(
+                            FXCollections.observableArrayList(list));
+                }))
+                .exceptionally(ex -> {
+                    Platform.runLater(() ->
+                            showAlert("List update error", ex.getCause().getMessage()));
                     return null;
                 });
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
