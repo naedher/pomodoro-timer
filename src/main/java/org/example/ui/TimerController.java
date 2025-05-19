@@ -54,8 +54,6 @@ public class TimerController {
         createNewTimeline();
 
         // Create TimerService
-        String token = AppContext.getInstance().getAuthToken();
-        //this.timerService = new RemoteTimerService(token);
         // we simply get factory class here, it choose which logic will work.
         this.timerService = TimerServiceFactory.get();
 

@@ -13,6 +13,8 @@ import org.example.model.dto.TimerCreate;
 import org.example.model.service.TimerService;
 import org.example.model.service.impl.RemoteTimerService;
 
+import java.util.concurrent.ExecutionException;
+
 
 public class AddTimerController {
     @FXML private TextField nameField;
@@ -21,10 +23,8 @@ public class AddTimerController {
     @FXML private Spinner<Integer> longBreakTimeSpinner;
     @FXML private Spinner<Integer> intervalSpinner;
     @FXML private Button createButton;
-    TimerController timerController;
 
     private Stage stage;
-    // i did not understand this, this needs to be final,
     private final TimerService timerService = TimerServiceFactory.get();
 
     @FXML
@@ -57,10 +57,11 @@ public class AddTimerController {
                 longBreakTimeSpinner.getValue(),
                 intervalSpinner.getValue()
         );
-        timerService.createTimer(request)
-                .thenRun(() -> Platform.runLater(() -> timerController.updateTimerList()))
-                .exceptionally(ex -> {return null;})
-                .join();
+        try {
+            timerService.createTimer(request).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         stage.close();
     }
 }
