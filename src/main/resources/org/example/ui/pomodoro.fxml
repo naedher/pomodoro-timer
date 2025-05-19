@@ -11,23 +11,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane styleClass="main-container" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.TimerController">
+<BorderPane styleClass="main-container" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.TimerController">
     <stylesheets>
         <URL value="@../style.css" />
     </stylesheets>
 
     <!-- Right side - Timer List Panel -->
     <right>
-        <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 20;" spacing="10" prefWidth="200">
-            <Label text="Saved Timers" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
+        <VBox prefWidth="200" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 20;">
+            <Label style="-fx-font-weight: bold; -fx-font-size: 18;" text="Saved Timers" />
             <ListView fx:id="timerListView">
                 <placeholder>
-                    <Label text="No saved timers"/>
+                    <Label text="No saved timers" />
                 </placeholder>
             </ListView>
-            <Button fx:id="addTimerButton" text="+"
-                    style="-fx-font-size: 16; -fx-min-width: 30; -fx-min-height: 30;"
-                    onAction="#addSavedTimer"/>
+            <Button fx:id="addTimerButton" onAction="#addSavedTimer" style="-fx-font-size: 16; -fx-min-width: 30; -fx-min-height: 30;" text="+" />
         </VBox>
     </right>
 
@@ -51,13 +49,12 @@
 
             <!-- Mode selection -->
             <HBox alignment="CENTER" spacing="20">
-                <ToggleButton fx:id="focusButton" onAction="#handleFocus" selected="true" styleClass="mode-button" text="Focus" />
-                <ToggleButton fx:id="shortBreakButton" onAction="#handleShortBreak" styleClass="mode-button" text="Short Break" />
-                <ToggleButton fx:id="longBreakButton" onAction="#handleLongBreak" styleClass="mode-button" text="Long Break" />
+                <ToggleButton fx:id="focusButton" selected="true" styleClass="mode-button" text="Focus" />
+                <ToggleButton fx:id="shortBreakButton" styleClass="mode-button" text="Short Break" />
+                <ToggleButton fx:id="longBreakButton" styleClass="mode-button" text="Long Break" />
             </HBox>
 
-            <Button fx:id="debugButton" text="DEBUG (3s)"
-                    onAction="#handleDebug"/>
+            <Button fx:id="debugButton" onAction="#handleDebug" text="DEBUG (3s)" />
 
             <!-- Control buttons -->
             <HBox alignment="CENTER" spacing="25">
