@@ -1,5 +1,6 @@
 package org.example.ui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
@@ -20,17 +21,15 @@ public class AddTimerController {
     @FXML private Spinner<Integer> longBreakTimeSpinner;
     @FXML private Spinner<Integer> intervalSpinner;
     @FXML private Button createButton;
+    TimerController timerController;
 
     private Stage stage;
     // i did not understand this, this needs to be final,
-    private TimerService timerService = TimerServiceFactory.get();
+    private final TimerService timerService = TimerServiceFactory.get();
 
     @FXML
     private void initialize() {
-        String token = AppContext.getInstance().getAuthToken();
-        this.timerService = new RemoteTimerService(token);
         initSpinners();
-
         createButton.setOnAction(e -> handleCreate());
     }
 
@@ -58,7 +57,10 @@ public class AddTimerController {
                 longBreakTimeSpinner.getValue(),
                 intervalSpinner.getValue()
         );
-        timerService.createTimer(request).join(); // missing error handling for now
+        timerService.createTimer(request)
+                .thenRun(() -> Platform.runLater(() -> timerController.updateTimerList()))
+                .exceptionally(ex -> {return null;})
+                .join();
         stage.close();
     }
 }

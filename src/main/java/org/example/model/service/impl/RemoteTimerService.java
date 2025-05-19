@@ -53,14 +53,12 @@ public class RemoteTimerService implements TimerService {
 
     @Override
     public CompletableFuture<Void> createTimer(TimerCreate timer) {
-        String jsonBody;
-        try {
-            jsonBody = mapper.writeValueAsString(timer);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        apiClient.post("/timers", jsonBody);
-        return CompletableFuture.completedFuture(null);
+        String json;
+        try { json = mapper.writeValueAsString(timer); }
+        catch (JsonProcessingException e) { return CompletableFuture.failedFuture(e); }
+
+        return apiClient.post("/timers", json)
+                .thenApply(resp -> null);
     }
 
     @Override

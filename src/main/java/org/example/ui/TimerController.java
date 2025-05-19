@@ -88,7 +88,7 @@ public class TimerController {
         updateTimerList();
     }
 
-    private void updateTimerList() {
+    protected void updateTimerList() {
         timerService.getUserTimers()
                 .thenAccept(list -> Platform.runLater(() -> {
                     timerListView.setItems(
