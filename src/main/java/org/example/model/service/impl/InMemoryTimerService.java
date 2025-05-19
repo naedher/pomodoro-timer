@@ -1,6 +1,5 @@
     package org.example.model.service.impl;
 
-    import org.example.exceptions.LocalStoreResourceNotFoundException;
     import org.example.model.dto.TimerCreate;
     import org.example.model.dto.TimerDetails;
     import org.example.model.dto.TimerUpdate;
