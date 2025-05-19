@@ -74,7 +74,7 @@ public class RemoteTimerService implements TimerService {
         try {
             jsonBody = mapper.writeValueAsString(request);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return CompletableFuture.failedFuture(e);
         }
         return apiClient.put("/timers/" + id, jsonBody)
                 .thenApply(response -> {
