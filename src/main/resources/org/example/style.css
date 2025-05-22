@@ -69,7 +69,7 @@
 }
 
 .text-btn:hover {
-    -fx-text-fill: #f57f17;
+    -fx-text-fill: #000000;
 }
 
 .start-btn {
