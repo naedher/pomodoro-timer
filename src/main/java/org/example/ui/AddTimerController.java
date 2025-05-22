@@ -27,6 +27,7 @@ public class AddTimerController {
     private Stage stage;
     private TimerService timerService;
 
+
     @FXML
     private void initialize() {
         String token = AppContext.getInstance().getAuthToken();
