@@ -68,6 +68,8 @@ public class LoginController {
     public void sendLoginRequest(String email, String password) {
         try {
             sendLoginRequest2(email, password);
+            AutoLogin auto = new AutoLogin();
+            auto.saveLogin(email,password);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

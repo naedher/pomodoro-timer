@@ -68,6 +68,8 @@ public class RegisterController {
                         if (!result.startsWith("error:")) {
                             System.out.println("Registration successful");
                             registrationSuccess();
+                            AutoLogin auto = new AutoLogin();
+                            auto.saveLogin(Email,Password);
                             AppContext app = AppContext.getInstance();
                             app.setAuthToken(result);
                         } else {
@@ -118,6 +120,7 @@ public class RegisterController {
             alert.setHeaderText(null);
             alert.setContentText("Your account has been created successfully!");
             alert.showAndWait();
+
 
             // Navigate to timer scene
             mainApp.timerScene();

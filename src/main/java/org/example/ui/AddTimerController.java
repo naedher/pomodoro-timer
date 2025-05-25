@@ -28,6 +28,7 @@ public class AddTimerController {
     private TimerService timerService;
 
 
+
     @FXML
     private void initialize() {
         String token = AppContext.getInstance().getAuthToken();

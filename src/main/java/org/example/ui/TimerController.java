@@ -41,7 +41,9 @@ public class TimerController {
     private int timeLeft;
     private TimerMode currentMode;
     private int currentInterval;
+
     private final IntegerProperty timeLeftProperty = new SimpleIntegerProperty();
+    private FullScreen fullScreen;
 
     private TimerDetails selectedTimer;
     private TimerService timerService;
@@ -155,7 +157,14 @@ public class TimerController {
         running = true;
         startButton.setText("Pause");
 
-        FullScreen full = new FullScreen(this);
+        if (fullScreen == null) {
+            fullScreen = new FullScreen(this);
+        }
+
+    }
+
+    void nll(){
+        fullScreen = null;
     }
 
     private void update() {

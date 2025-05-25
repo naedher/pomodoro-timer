@@ -38,6 +38,9 @@ public class Main extends Application {
             System.out.println("Login FXML Error");
             e.printStackTrace();
         }
+        AutoLogin auto = new AutoLogin();
+        String[] login = auto.loadLogin();
+
     }
 
     // Register scene using FXML
