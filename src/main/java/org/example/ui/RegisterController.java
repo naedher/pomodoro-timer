@@ -126,12 +126,4 @@ public class RegisterController {
             mainApp.timerScene();
         });
     }
-
-    public String[] getSuccess() {
-        return Success;
-    }
-
-    public void reset() {
-        Success[0] = null;
-    }
 }
