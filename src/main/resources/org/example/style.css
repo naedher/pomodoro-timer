@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
+
+
 /* Base Styles */
 .root {
     -fx-font-family: "Bangers";
@@ -11,10 +13,15 @@
 }
 
 /* Text Styles */
-.title {
+.header-title {
+    -fx-font-family: 'Bangers', cursive;
     -fx-font-size: 36px;
-    -fx-text-fill: #2d3e50;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4,0,2,2);
+    -fx-text-fill: #f9a825;
+    -fx-effect:
+            dropshadow(three-pass-box, #000000, 0, 0, 0, 3px),
+            dropshadow(three-pass-box, #000000, 0, 0, 0, 3px),
+            dropshadow(three-pass-box, #000000, 0, 0, 0, 3px);
+    -fx-padding: 3px;
 }
 
 .subtitle {

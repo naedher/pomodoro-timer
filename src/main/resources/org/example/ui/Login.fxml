@@ -22,9 +22,9 @@
                 <Insets bottom="30" left="40" right="40" top="30" />
             </padding>
 
-            <Label styleClass="header-title" text="POMODORO TIMER">
+            <Label styleClass="header-title" text="OMFEM!">
                 <font>
-                    <Font size="24.0" />
+                    <Font size="36.0" />
                 </font>
             </Label>
 
