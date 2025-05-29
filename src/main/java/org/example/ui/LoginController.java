@@ -53,6 +53,15 @@ public class LoginController {
         }
     }
 
+    @FXML
+    private void handleGuestMode() {
+        AppContext.getInstance().setGuestMode(true);
+        System.out.println("Guest mode enabled. Auth token cleared.");
+
+        // Navigate to the main application scene
+        Platform.runLater(() -> mainApp.timerScene());
+    }
+
     // Handle the action when the user clicks the "Register" button
     @FXML
     private void handleRegisterPage() {
