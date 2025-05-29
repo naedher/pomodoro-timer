@@ -10,17 +10,14 @@ import org.example.model.dto.TimerUpdate;
 import org.example.model.service.TimerService;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.List;
 
-public class TimerServiceImpl implements TimerService {
+public class RemoteTimerService implements TimerService {
     private final ApiClient apiClient;
     private ObjectMapper mapper;
 
 
-    public TimerServiceImpl(String token) {
+    public RemoteTimerService(String token) {
         this.apiClient = new ApiClient(token);
         this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
@@ -55,27 +52,38 @@ public class TimerServiceImpl implements TimerService {
     }
 
     @Override
-    public CompletableFuture<Void> createTimer(TimerCreate timer) {
+    public CompletableFuture<TimerDetails> createTimer(TimerCreate timer) {
         String jsonBody;
         try {
             jsonBody = mapper.writeValueAsString(timer);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return CompletableFuture.failedFuture(e);
         }
-        apiClient.post("/timers", jsonBody);
-        return CompletableFuture.completedFuture(null);
+        return apiClient.postWithHeaders("/timers", jsonBody)
+                .thenCompose(resp -> {
+                    String location = resp.headers().firstValue("location")
+                        .orElseThrow(() -> new RuntimeException("No Location header in response"));
+                    String id = location.substring(location.lastIndexOf('/') + 1);
+                    return getTimerDetails(Long.parseLong(id));
+                });
     }
 
     @Override
-    public CompletableFuture<Void> updateTimer(long id, TimerUpdate request) {
+    public CompletableFuture<TimerDetails> updateTimer(long id, TimerUpdate request) {
         String jsonBody;
         try {
             jsonBody = mapper.writeValueAsString(request);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return CompletableFuture.failedFuture(e);
         }
-        apiClient.put("/timers/" + id, jsonBody);
-        return CompletableFuture.completedFuture(null);
+        return apiClient.put("/timers/" + id, jsonBody)
+                .thenApply(response -> {
+                    try {
+                        return mapper.readValue(response, TimerDetails.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override

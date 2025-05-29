@@ -10,7 +10,6 @@ module org.example {
     requires transitive javafx.graphics;
 
     exports org.example.model.dto to com.fasterxml.jackson.databind;
-    exports org.example.controller to com.fasterxml.jackson.databind;
     exports org.example.model.service to com.fasterxml.jackson.databind;
     exports org.example.infrastructure to com.fasterxml.jackson.databind;
 
