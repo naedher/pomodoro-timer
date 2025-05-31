@@ -16,6 +16,7 @@ import javafx.util.Duration;
 import org.example.model.AppContext;
 import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
+import org.example.model.dto.TimerPreference;
 import org.example.model.service.TimerService;
 
 
@@ -45,6 +46,11 @@ public class TimerController {
     private TimerDetails selectedTimer;
     private TimerService timerService;
     private boolean running;
+
+    private TimerPreference timerPreference;
+    private boolean soundEnabled;
+    private String theme;
+    private int alarmNumber = 1;
 
 
     @FXML
@@ -210,6 +216,34 @@ public class TimerController {
             clip.start(); // Start playing the sound
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openSettings() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/Settings.fxml"));
+            Parent root = loader.load();
+
+            Stage settingsStage = new Stage();
+            settingsStage.initModality(Modality.APPLICATION_MODAL);
+            settingsStage.setTitle("Timer Settings");
+            settingsStage.setScene(new Scene(root));
+
+            SettingsController settingsController = loader.getController();
+            settingsController.setStage(settingsStage);
+            settingsController.setTimerPreference(timerPreference);
+
+            settingsStage.showAndWait();
+
+            // Update preferences after dialog closes
+            if (settingsController.getTimerPreference() != null) {
+                timerPreference = settingsController.getTimerPreference();
+                soundEnabled = timerPreference.isEnabledSound();
+                alarmNumber = timerPreference.getAlarmNumber();
+            }
+        } catch (IOException e) {
+            showAlert("Error", "Could not open settings: " + e.getMessage());
         }
     }
 
