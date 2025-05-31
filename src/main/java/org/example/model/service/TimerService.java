@@ -3,6 +3,7 @@ package org.example.model.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.model.dto.TimerCreate;
 import org.example.model.dto.TimerDetails;
+import org.example.model.dto.TimerPreference;
 import org.example.model.dto.TimerUpdate;
 
 import java.util.concurrent.CompletableFuture;
@@ -14,4 +15,6 @@ public interface TimerService {
     CompletableFuture<TimerDetails> updateTimer(long id, TimerUpdate request);
     CompletableFuture<Void> deleteTimer(long id);
     CompletableFuture<List<TimerDetails>> getUserTimers();
+    CompletableFuture<TimerPreference> getTimerPreference(long id);
+    CompletableFuture<TimerPreference> savePreferences(TimerPreference preferences);
 }
