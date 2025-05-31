@@ -17,6 +17,7 @@ import org.example.model.AppContext;
 import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
 import org.example.model.service.TimerService;
+import javafx.scene.control.CheckBox;
 
 
 import javax.sound.sampled.*;
@@ -34,6 +35,7 @@ public class TimerController {
     @FXML private ToggleButton focusButton;
     @FXML private ToggleButton shortBreakButton;
     @FXML private ToggleButton longBreakButton;
+    @FXML private CheckBox CheckBox;
 
     @FXML private ListView<TimerDetails> timerListView;
 
@@ -45,6 +47,7 @@ public class TimerController {
     private TimerDetails selectedTimer;
     private TimerService timerService;
     private boolean running;
+    private boolean fullScreenMode;
 
 
     @FXML
@@ -56,6 +59,14 @@ public class TimerController {
         // Create a default timer to be shown on startup
         this.selectedTimer = new TimerDetails(-1L, "Default timer", null, 25, 5, 15, 4);
         createNewTimeline();
+
+        CheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                fullScreenMode = true;
+            } else {
+                fullScreenMode = false;
+            }
+        });
 
         // Create TimerService
         // we simply get factory class here, it choose which logic will work.
