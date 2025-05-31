@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.infrastructure.ApiClient;
 import org.example.model.dto.TimerCreate;
 import org.example.model.dto.TimerDetails;
+import org.example.model.dto.TimerPreference;
 import org.example.model.dto.TimerUpdate;
 import org.example.model.service.TimerService;
 
@@ -45,6 +46,36 @@ public class RemoteTimerService implements TimerService {
                     try {
                         return mapper.readValue(response, 
                             mapper.getTypeFactory().constructCollectionType(List.class, TimerDetails.class));
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    @Override
+    public CompletableFuture<TimerPreference> getTimerPreference(long id) {
+        return apiClient.get("/preferences?userId=" + id)
+                .thenApply(response -> {
+                    try {
+                        return mapper.readValue(response, TimerPreference.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    @Override
+    public CompletableFuture<TimerPreference> savePreferences(TimerPreference preferences) {
+        String jsonBody;
+        try {
+            jsonBody = mapper.writeValueAsString(preferences);
+        } catch (JsonProcessingException e) {
+            return CompletableFuture.failedFuture(e);
+        }
+        return apiClient.put("/preferences", jsonBody)
+                .thenApply(response -> {
+                    try {
+                        return mapper.readValue(response, TimerPreference.class);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }

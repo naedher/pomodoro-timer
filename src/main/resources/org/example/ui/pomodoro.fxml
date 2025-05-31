@@ -16,6 +16,13 @@
         <URL value="@../style.css" />
     </stylesheets>
 
+    <!-- Top - Settings Button -->
+    <top>
+        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 10;">
+            <Button text="⚙ Settings" onAction="#openSettings" styleClass="settings-btn"/>
+        </HBox>
+    </top>
+
     <!-- Right side - Timer List Panel -->
     <right>
         <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 20;" spacing="10" prefWidth="200">
