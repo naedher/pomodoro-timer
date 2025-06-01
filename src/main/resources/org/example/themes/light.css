@@ -1,0 +1,68 @@
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #333333;
+}
+
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+.label {
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-text-fill: #333333;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 4px;
+}
+
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 4px;
+}
+
+.check-box {
+    -fx-text-fill: #333333;
+}
+
+.slider {
+    -fx-control-inner-background: white;
+}
+
+.progress-bar {
+    -fx-accent: #4CAF50;
+}
+
+.menu-bar {
+    -fx-background-color: #ffffff;
+}
+
+.menu {
+    -fx-background-color: #ffffff;
+}
+
+.menu-item {
+    -fx-background-color: #ffffff;
+}
+
+.menu-item:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.context-menu {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+}
+

@@ -1,0 +1,48 @@
+.main-container {
+    -fx-background-color: #1a1a1a;
+}
+
+.content-area {
+    -fx-background-color: #1a1a1a;
+}
+
+.header-title {
+    -fx-text-fill: #ffffff;
+}
+
+.timer {
+    -fx-text-fill: #ffffff;
+}
+
+.interval-label {
+    -fx-text-fill: #b3b3b3;
+}
+
+.mode-button {
+    -fx-background-color: #333333;
+    -fx-text-fill: #ffffff;
+}
+
+.mode-button:selected {
+    -fx-background-color: #2E7D32;
+    -fx-text-fill: white;
+}
+
+.start-btn {
+    -fx-background-color: #2E7D32;
+    -fx-text-fill: white;
+}
+
+.reset-btn {
+    -fx-background-color: #C62828;
+    -fx-text-fill: white;
+}
+
+.settings-btn {
+    -fx-background-color: #1565C0;
+    -fx-text-fill: white;
+}
+
+.settings-btn:hover {
+    -fx-background-color: #0D47A1;
+}

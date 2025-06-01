@@ -16,6 +16,7 @@ import javafx.util.Duration;
 import org.example.model.AppContext;
 import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
+import org.example.model.dto.TimerPreference;
 import org.example.model.service.TimerService;
 
 
@@ -46,6 +47,11 @@ public class TimerController {
     private TimerService timerService;
     private boolean running;
 
+    private TimerPreference timerPreference;
+    private boolean soundEnabled;
+    private String theme;
+    private int alarmNumber = 1;
+
 
     @FXML
     public void initialize() {
@@ -58,8 +64,19 @@ public class TimerController {
         createNewTimeline();
 
         // Create TimerService
-        // we simply get factory class here, it choose which logic will work.
         this.timerService = TimerServiceFactory.get();
+
+        timerService.getTimerPreference(1) // TODO: Use actual user ID
+                .thenAccept(prefs -> {
+                    timerPreference = prefs;
+                    soundEnabled = prefs.isEnabledSound();
+                    alarmNumber = prefs.getAlarmNumber();
+                    Platform.runLater(() -> applyTheme(prefs.getTheme()));
+                })
+                .exceptionally(ex -> {
+                    System.err.println("Could not load preferences: " + ex.getMessage());
+                    return null;
+                });
 
         initListListener();
         update();
@@ -210,6 +227,44 @@ public class TimerController {
             clip.start(); // Start playing the sound
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openSettings() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/Settings.fxml"));
+            Parent root = loader.load();
+
+            Stage settingsStage = new Stage();
+            settingsStage.initModality(Modality.APPLICATION_MODAL);
+            settingsStage.setTitle("Timer Settings");
+            settingsStage.setScene(new Scene(root));
+
+            SettingsController settingsController = loader.getController();
+            settingsController.setStage(settingsStage);
+            settingsController.setTimerPreference(timerPreference);
+
+            settingsStage.showAndWait();
+
+            // Update preferences after dialog closes
+            if (settingsController.getTimerPreference() != null) {
+                timerPreference = settingsController.getTimerPreference();
+                soundEnabled = timerPreference.isEnabledSound();
+                alarmNumber = timerPreference.getAlarmNumber();
+                applyTheme(timerPreference.getTheme());
+            }
+        } catch (IOException e) {
+            showAlert("Error", "Could not open settings: " + e.getMessage());
+        }
+    }
+
+    private void applyTheme(String theme) {
+        Scene scene = timerLabel.getScene();
+        if (scene != null) {
+            scene.getStylesheets().removeIf(sheet -> sheet.contains("/themes/"));
+            scene.getStylesheets().add(getClass().getResource("/org/example/base.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/org/example/themes/" + theme + ".css").toExternalForm());
         }
     }
 

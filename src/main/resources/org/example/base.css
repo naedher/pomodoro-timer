@@ -1,64 +1,45 @@
 .main-container {
-    -fx-background-color: white;
+    -fx-padding: 20;
 }
 
 .content-area {
-    -fx-background-color: white;
+    -fx-spacing: 30;
 }
 
 .header-title {
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
+    -fx-font-size: 29px;
 }
 
 .timer {
     -fx-font-size: 72px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
 }
 
 .interval-label {
     -fx-font-size: 18px;
-    -fx-text-fill: #666666;
 }
 
 .mode-button {
-    -fx-background-color: #f0f0f0;
-    -fx-text-fill: #333333;
     -fx-font-size: 14px;
     -fx-padding: 8 16;
     -fx-background-radius: 4;
 }
 
-.mode-button:selected {
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
-}
-
 .start-btn {
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-padding: 10 30;
     -fx-background-radius: 4;
 }
 
 .reset-btn {
-    -fx-background-color: #f44336;
-    -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-padding: 10 30;
     -fx-background-radius: 4;
 }
 
 .settings-btn {
-    -fx-background-color: #2196F3;
-    -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-padding: 8 16;
     -fx-background-radius: 4;
-}
-
-.settings-btn:hover {
-    -fx-background-color: #1976D2;
 }

@@ -2,6 +2,7 @@
 
     import org.example.model.dto.TimerCreate;
     import org.example.model.dto.TimerDetails;
+    import org.example.model.dto.TimerPreference;
     import org.example.model.dto.TimerUpdate;
     import org.example.model.service.TimerService;
 
@@ -62,6 +63,18 @@
                 t.setPomodoroCount(req.getPomodoroCount());
                 return t;
             });
+        }
+
+        @Override
+        public CompletableFuture<TimerPreference> getTimerPreference(long id) {
+            TimerPreference defaultPrefs = new TimerPreference(true, "default", 1);
+            return CompletableFuture.completedFuture(defaultPrefs);
+        }
+
+        @Override
+        public CompletableFuture<TimerPreference> savePreferences(TimerPreference preferences) {
+            // In guest mode, just return the preferences without saving
+            return CompletableFuture.completedFuture(preferences);
         }
 
         @Override
