@@ -3,6 +3,8 @@ package org.example.ui;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -47,7 +49,10 @@ public class TimerController {
     private TimerDetails selectedTimer;
     private TimerService timerService;
     private boolean running;
+
     private boolean fullScreenMode;
+    private final IntegerProperty timeLeftProperty = new SimpleIntegerProperty();
+    private FullScreen fullScreen;
 
 
     @FXML
@@ -137,6 +142,7 @@ public class TimerController {
 
     private void onTick() {
         timeLeft--;
+        timeLeftProperty.set(timeLeft);
         if (timeLeft <= 0) {
             onComplete();
         } else {
@@ -155,7 +161,7 @@ public class TimerController {
     }
 
 
-    private void stop() {
+    void stop() {
         timeline.stop();
         running = false;
         startButton.setText("Start");
@@ -165,6 +171,26 @@ public class TimerController {
         timeline.play();
         running = true;
         startButton.setText("Pause");
+
+        if(fullScreenMode) {
+            if (fullScreen == null) {
+                fullScreen = new FullScreen(this);
+            }
+            fullScreen.setTitleText(fullScreenTitle());
+        }
+    }
+
+    private String fullScreenTitle(){
+        switch (currentMode) {
+            case FOCUS:
+                return "FOCUS";
+            case SHORT_BREAK:
+                return "SHORT BREAK";
+            case LONG_BREAK:
+                return "LONG BREAK";
+            default:
+                return "Unknown";
+        }
     }
 
     private void update() {
@@ -185,6 +211,7 @@ public class TimerController {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> onTick()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeLeft = selectedTimer.getDurationByMode(currentMode);
+        timeLeftProperty.set(timeLeft);
     }
 
 
@@ -291,7 +318,17 @@ public class TimerController {
         // Set timer to 3 seconds for testing
         reset();
         timeLeft = 3;
+        timeLeftProperty.set(timeLeft);
         updateDisplay();
     }
+
+    public IntegerProperty timeLeftProperty() {
+        return timeLeftProperty;
+    }
+
+    void nll(){
+        fullScreen = null;
+    }
+
 
 }
