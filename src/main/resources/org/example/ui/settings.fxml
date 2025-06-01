@@ -11,6 +11,11 @@
 
     <Label text="Timer Settings" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
+    <Label text="Theme:"/>
+    <ComboBox fx:id="themeComboBox" prefWidth="200"/>
+
+    <Separator/>
+
     <CheckBox fx:id="soundEnabledCheckbox" text="Enable Sound"/>
 
     <Label text="Alarm Sound:"/>
