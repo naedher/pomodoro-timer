@@ -11,13 +11,14 @@ import org.example.model.TimerServiceFactory;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.io.InputStream;
 
 public class SettingsController {
     @FXML private CheckBox soundEnabledCheckbox;
     @FXML private ComboBox<String> soundComboBox;
+    @FXML private ComboBox<String> themeComboBox;
     @FXML private Button previewButton;
 
     private Stage stage;
@@ -25,15 +26,23 @@ public class SettingsController {
     private final TimerService timerService = TimerServiceFactory.get();
 
     private static final List<String> AVAILABLE_SOUNDS = Arrays.asList(
-            "alarm1.mp3",
-            "alarm2.mp3",
-            "alarm3.mp3"
+            "alarm1.wav",
+            "alarm2.wav",
+            "alarm3.wav"
+    );
+
+    private static final List<String> AVAILABLE_THEMES = Arrays.asList(
+            "light",
+            "dark"
     );
 
     @FXML
     public void initialize() {
         soundComboBox.getItems().addAll(AVAILABLE_SOUNDS);
         soundComboBox.setValue(AVAILABLE_SOUNDS.get(0));
+
+        themeComboBox.getItems().addAll(AVAILABLE_THEMES);
+        themeComboBox.setValue(AVAILABLE_THEMES.get(0));
     }
 
     public void setStage(Stage stage) {
@@ -45,6 +54,7 @@ public class SettingsController {
         if (preference != null) {
             soundEnabledCheckbox.setSelected(preference.isEnabledSound());
             soundComboBox.setValue(AVAILABLE_SOUNDS.get(preference.getAlarmNumber() - 1));
+            themeComboBox.setValue(preference.getTheme());
         }
     }
 
@@ -81,6 +91,7 @@ public class SettingsController {
 
         timerPreference.setEnabledSound(soundEnabledCheckbox.isSelected());
         timerPreference.setAlarmNumber(AVAILABLE_SOUNDS.indexOf(soundComboBox.getValue()) + 1);
+        timerPreference.setTheme(themeComboBox.getValue());
 
         // Save preferences to backend
         timerService.savePreferences(timerPreference)

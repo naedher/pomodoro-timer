@@ -64,8 +64,19 @@ public class TimerController {
         createNewTimeline();
 
         // Create TimerService
-        // we simply get factory class here, it choose which logic will work.
         this.timerService = TimerServiceFactory.get();
+
+        timerService.getTimerPreference(1) // TODO: Use actual user ID
+                .thenAccept(prefs -> {
+                    timerPreference = prefs;
+                    soundEnabled = prefs.isEnabledSound();
+                    alarmNumber = prefs.getAlarmNumber();
+                    Platform.runLater(() -> applyTheme(prefs.getTheme()));
+                })
+                .exceptionally(ex -> {
+                    System.err.println("Could not load preferences: " + ex.getMessage());
+                    return null;
+                });
 
         initListListener();
         update();
@@ -241,9 +252,19 @@ public class TimerController {
                 timerPreference = settingsController.getTimerPreference();
                 soundEnabled = timerPreference.isEnabledSound();
                 alarmNumber = timerPreference.getAlarmNumber();
+                applyTheme(timerPreference.getTheme());
             }
         } catch (IOException e) {
             showAlert("Error", "Could not open settings: " + e.getMessage());
+        }
+    }
+
+    private void applyTheme(String theme) {
+        Scene scene = timerLabel.getScene();
+        if (scene != null) {
+            scene.getStylesheets().removeIf(sheet -> sheet.contains("/themes/"));
+            scene.getStylesheets().add(getClass().getResource("/org/example/base.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/org/example/themes/" + theme + ".css").toExternalForm());
         }
     }
 
