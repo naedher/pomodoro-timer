@@ -1,0 +1,45 @@
+.main-container {
+    -fx-padding: 20;
+}
+
+.content-area {
+    -fx-spacing: 30;
+}
+
+.header-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 29px;
+}
+
+.timer {
+    -fx-font-size: 72px;
+    -fx-font-weight: bold;
+}
+
+.interval-label {
+    -fx-font-size: 18px;
+}
+
+.mode-button {
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 4;
+}
+
+.start-btn {
+    -fx-font-size: 16px;
+    -fx-padding: 10 30;
+    -fx-background-radius: 4;
+}
+
+.reset-btn {
+    -fx-font-size: 16px;
+    -fx-padding: 10 30;
+    -fx-background-radius: 4;
+}
+
+.settings-btn {
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 4;
+}
