@@ -9,11 +9,12 @@ import java.io.IOException;
 
 public class Main extends Application {
     private Stage primaryStage;
-    private LoginController loginC;
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_HEIGHT = 600;
-    private static final int LOGIN_WIDTH = 500;
-    private static final int LOGIN_HEIGHT = 400;
+    private static final int LOGIN_WIDTH = 700;
+    private static final int LOGIN_HEIGHT = 500;
+    private static final int REGISTER_WIDTH = 500;
+    private static final int REGISTER_HEIGHT = 450;
 
     @Override
     public void start(Stage primaryStage) {
@@ -21,18 +22,46 @@ public class Main extends Application {
         loginScene(); // Start with login scene
     }
 
-    // Login scene
+    // Login scene using FXML
     public void loginScene() {
-        LoginScene loginScene = new LoginScene(this);
-        loginC = new LoginController(this);
-        Scene scene = loginScene.createScene();
-        setStage("Pomodoro Timer - Login", scene, LOGIN_WIDTH, LOGIN_HEIGHT, false);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/Login.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and set mainApp
+            LoginController controller = loader.getController();
+            controller.setMainApp(this);
+
+            Scene scene = new Scene(root, LOGIN_WIDTH, LOGIN_HEIGHT);
+            setStage("Pomodoro Timer - Login", scene, LOGIN_WIDTH, LOGIN_HEIGHT, false);
+        } catch (IOException e) {
+            System.out.println("Login FXML Error");
+            e.printStackTrace();
+        }
+    }
+
+    // Register scene using FXML
+    public void registerScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/Register.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and set mainApp
+            RegisterController controller = loader.getController();
+            controller.setMainApp(this);
+
+            Scene scene = new Scene(root, REGISTER_WIDTH, REGISTER_HEIGHT);
+            setStage("Pomodoro Timer - Register", scene, REGISTER_WIDTH, REGISTER_HEIGHT, false);
+        } catch (IOException e) {
+            System.out.println("Register FXML Error");
+            e.printStackTrace();
+        }
     }
 
     // Timer scene
     public void timerScene() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("pomodoro.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/ui/pomodoro.fxml"));
             Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
             setStage("POMODORO", scene, WINDOW_WIDTH, WINDOW_HEIGHT, true);
         } catch (IOException e) {
@@ -52,10 +81,6 @@ public class Main extends Application {
         primaryStage.centerOnScreen();
         primaryStage.setResizable(resizable);
         primaryStage.show();
-    }
-
-    public LoginController getLoginController() {
-        return loginC;
     }
 
     private static String authToken;
