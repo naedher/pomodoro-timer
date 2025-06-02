@@ -1,6 +1,5 @@
-package org.example.model.service;
+package org.example.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.model.dto.TimerCreate;
 import org.example.model.dto.TimerDetails;
 import org.example.model.dto.TimerUpdate;

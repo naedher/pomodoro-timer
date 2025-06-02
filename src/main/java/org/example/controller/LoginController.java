@@ -10,7 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.example.model.AppContext;
 import org.example.model.dto.AuthRequest;
-import org.example.model.service.impl.AuthServiceImpl;
+import org.example.service.impl.AuthServiceImpl;
 import org.example.ui.Main;
 
 import java.util.concurrent.CompletableFuture;

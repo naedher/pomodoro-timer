@@ -1,4 +1,4 @@
-package org.example.model.service.impl;
+package org.example.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,7 @@ import org.example.infrastructure.ApiClient;
 import org.example.model.dto.TimerCreate;
 import org.example.model.dto.TimerDetails;
 import org.example.model.dto.TimerUpdate;
-import org.example.model.service.TimerService;
+import org.example.service.TimerService;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.List;
