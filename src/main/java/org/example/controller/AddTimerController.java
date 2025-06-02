@@ -6,7 +6,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.model.TimerServiceFactory;
+import org.example.service.TimerServiceFactory;
 import org.example.model.dto.TimerCreate;
 import org.example.service.interfaces.TimerService;
 

@@ -2,7 +2,7 @@ package org.example.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.example.model.TimerServiceFactory;
+import org.example.service.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
 import org.example.service.interfaces.TimerService;
 import org.example.manager.TimerGuiManager;
