@@ -1,9 +1,9 @@
-    package org.example.service.impl;
+    package org.example.service;
 
     import org.example.model.dto.TimerCreate;
     import org.example.model.dto.TimerDetails;
     import org.example.model.dto.TimerUpdate;
-    import org.example.service.TimerService;
+    import org.example.service.interfaces.TimerService;
 
     import java.time.LocalDateTime;
     import java.util.ArrayList;

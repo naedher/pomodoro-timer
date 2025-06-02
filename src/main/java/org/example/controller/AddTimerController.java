@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerCreate;
-import org.example.service.TimerService;
+import org.example.service.interfaces.TimerService;
 
 import java.util.concurrent.ExecutionException;
 

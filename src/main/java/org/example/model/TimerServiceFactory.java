@@ -1,8 +1,8 @@
 package org.example.model;
 
-import org.example.service.TimerService;
-import org.example.service.impl.InMemoryTimerService;
-import org.example.service.impl.RemoteTimerService;
+import org.example.service.interfaces.TimerService;
+import org.example.service.InMemoryTimerService;
+import org.example.service.RemoteTimerService;
 // this class handles which timerservice class is going to be used
 public final class TimerServiceFactory {
     private static final InMemoryTimerService GUEST = new InMemoryTimerService();

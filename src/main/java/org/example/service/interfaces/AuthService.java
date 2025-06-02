@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.interfaces;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.model.dto.AuthRequest;

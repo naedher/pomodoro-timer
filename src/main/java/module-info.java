@@ -19,4 +19,5 @@ module org.example {
     opens org.example.controller to javafx.fxml;
     exports org.example.manager to javafx.graphics;
     opens org.example.manager to javafx.fxml;
+    exports org.example.service.interfaces to com.fasterxml.jackson.databind;
 }

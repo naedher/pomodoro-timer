@@ -9,7 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.controller.AddTimerController;
 import org.example.controller.TimerController;
-import org.example.service.TimerService;
+import org.example.service.interfaces.TimerService;
 
 import java.io.IOException;
 
