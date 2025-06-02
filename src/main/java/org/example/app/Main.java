@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +28,7 @@ public class Main extends Application {
     // Login scene using FXML
     public void loginScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/app/Login.fxml"));
             Parent root = loader.load();
 
             // Get the controller and set mainApp
@@ -46,7 +46,7 @@ public class Main extends Application {
     // Register scene using FXML
     public void registerScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/Register.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/app/Register.fxml"));
             Parent root = loader.load();
 
             // Get the controller and set mainApp
@@ -64,7 +64,7 @@ public class Main extends Application {
     // Timer scene
     public void timerScene() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/org/example/ui/pomodoro.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/app/pomodoro.fxml"));
             Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
             setStage("POMODORO", scene, WINDOW_WIDTH, WINDOW_HEIGHT, true);
         } catch (IOException e) {

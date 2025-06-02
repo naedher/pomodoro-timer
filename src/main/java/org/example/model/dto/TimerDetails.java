@@ -1,6 +1,6 @@
 package org.example.model.dto;
 
-import org.example.ui.TimerMode;
+import org.example.app.TimerMode;
 import org.example.utils.Utils;
 
 import java.time.LocalDateTime;

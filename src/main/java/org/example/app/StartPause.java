@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.app;
 
 public enum StartPause {
     START("Start"),

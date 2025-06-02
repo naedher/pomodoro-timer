@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import org.example.model.AppContext;
 import org.example.model.dto.AuthRequest;
 import org.example.service.AuthServiceImpl;
-import org.example.ui.Main;
+import org.example.app.Main;
 
 import java.util.concurrent.CompletableFuture;
 

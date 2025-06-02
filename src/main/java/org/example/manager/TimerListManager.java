@@ -32,7 +32,7 @@ public class TimerListManager {
 
     public void addSavedTimer() {
         // Load AddTimer dialogue
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/AddTimer.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/app/AddTimer.fxml"));
         Parent root;
         try {
             root = loader.load();

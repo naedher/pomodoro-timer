@@ -5,8 +5,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import org.example.controller.TimerController;
 import org.example.model.dto.TimerDetails;
-import org.example.ui.StartPause;
-import org.example.ui.TimerMode;
+import org.example.app.StartPause;
+import org.example.app.TimerMode;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
