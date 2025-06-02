@@ -18,7 +18,7 @@ public class TimerController {
 
     @FXML private ListView<TimerDetails> timerListView;
 
-    private TimerGui timerGui;
+    private TimerGuiManager timerGuiManager;
     private TimerListManager listManager;
 
     @FXML
@@ -30,10 +30,10 @@ public class TimerController {
         TimerService timerService = TimerServiceFactory.get();
 
         // Create TimerGui
-        this.timerGui = new TimerGui(this);
+        this.timerGuiManager = new TimerGuiManager(this);
 
         // Create ListManager
-        this.listManager = new TimerListManager(this, timerService, timerGui);
+        this.listManager = new TimerListManager(this, timerService, timerGuiManager);
     }
 
     @FXML
@@ -44,20 +44,20 @@ public class TimerController {
     // Method to start or stop the timer
     @FXML
     private void startStop() {
-        timerGui.startStop();
+        timerGuiManager.startStop();
     }
 
     // Method to reset the timer
     @FXML
     private void reset() {
-        timerGui.reset();
+        timerGuiManager.reset();
     }
 
     // Method to handle debug button action
     @FXML
     private void handleDebug() {
         // Set timer to 3 seconds for testing
-        timerGui.debug();
+        timerGuiManager.debug();
     }
 
     public void setTimerLabelText(String text) {

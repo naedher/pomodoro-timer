@@ -12,10 +12,10 @@ public class TimerManager {
     private int timeLeft;
     private Timeline timeline;
     private TimerDetails selectedTimer;
-    private final TimerGui timerGui;
+    private final TimerGuiManager timerGuiManager;
 
-    public TimerManager(TimerGui timerGui) {
-        this.timerGui = timerGui;
+    public TimerManager(TimerGuiManager timerGuiManager) {
+        this.timerGuiManager = timerGuiManager;
         this.currentMode = TimerMode.FOCUS;
         this.currentInterval = 1;
 
@@ -37,18 +37,18 @@ public class TimerManager {
         if (timeLeft <= 0) {
             onComplete();
         } else {
-            timerGui.updateDisplay(timeLeft);
+            timerGuiManager.updateDisplay(timeLeft);
         }
     }
 
 
     // Handle timer completion logic
     public void onComplete() {
-        timerGui.playAlarmSound();
+        timerGuiManager.playAlarmSound();
         nextInterval();
         reset();
         start();
-        timerGui.update();
+        timerGuiManager.update();
     }
 
     // Method to handle timer completion

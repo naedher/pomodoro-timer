@@ -18,12 +18,12 @@ public class TimerListManager {
 
     private final TimerController timerController;
     private final TimerService timerService;
-    private final TimerGui timerGui;
+    private final TimerGuiManager timerGuiManager;
 
-    public TimerListManager(TimerController timerController, TimerService timerService, TimerGui timerGui) {
+    public TimerListManager(TimerController timerController, TimerService timerService, TimerGuiManager timerGuiManager) {
         this.timerController = timerController;
         this.timerService = timerService;
-        this.timerGui = timerGui;
+        this.timerGuiManager = timerGuiManager;
 
         initListListener();
     }
@@ -65,10 +65,10 @@ public class TimerListManager {
     private void initListListener() {
         timerController.getTimerListView().getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                timerGui.setSelectedTimer(newVal);
-                timerGui.reset();
+                timerGuiManager.setSelectedTimer(newVal);
+                timerGuiManager.reset();
             }
-            timerGui.update();
+            timerGuiManager.update();
         });
     }
 }

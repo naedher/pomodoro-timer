@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TimerGui {
+public class TimerGuiManager {
 
     private final TimerController timerController;
     private final TimerManager timerManager;
@@ -21,7 +21,7 @@ public class TimerGui {
 
     private ToggleButton lastButtonSelected;
 
-    public TimerGui(TimerController timerController) {
+    public TimerGuiManager(TimerController timerController) {
         this.timerController = timerController;
         this.timerManager = new TimerManager(this);
 
