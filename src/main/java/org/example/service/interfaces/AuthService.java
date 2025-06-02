@@ -1,7 +1,7 @@
 package org.example.service.interfaces;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.example.model.dto.AuthRequest;
+import org.example.model.AuthRequest;
 
 import java.util.concurrent.CompletableFuture;
 

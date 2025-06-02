@@ -9,7 +9,7 @@ module org.example {
     requires com.fasterxml.jackson.databind;
     requires transitive javafx.graphics;
 
-    exports org.example.model.dto to com.fasterxml.jackson.databind;
+    exports org.example.model to com.fasterxml.jackson.databind;
     exports org.example.service to com.fasterxml.jackson.databind;
     exports org.example.infrastructure to com.fasterxml.jackson.databind;
 

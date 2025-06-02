@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.example.app.AppContext;
-import org.example.model.dto.AuthRequest;
+import org.example.model.AuthRequest;
 import org.example.service.AuthServiceImpl;
 import org.example.app.Main;
 

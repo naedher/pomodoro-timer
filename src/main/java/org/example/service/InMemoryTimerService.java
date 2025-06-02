@@ -1,8 +1,8 @@
     package org.example.service;
 
-    import org.example.model.dto.TimerCreate;
-    import org.example.model.dto.TimerDetails;
-    import org.example.model.dto.TimerUpdate;
+    import org.example.model.TimerCreate;
+    import org.example.model.TimerDetails;
+    import org.example.model.TimerUpdate;
     import org.example.service.interfaces.TimerService;
 
     import java.time.LocalDateTime;

@@ -3,7 +3,7 @@ package org.example.manager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import org.example.model.dto.TimerDetails;
+import org.example.model.TimerDetails;
 import org.example.app.TimerMode;
 
 public class TimerManager {

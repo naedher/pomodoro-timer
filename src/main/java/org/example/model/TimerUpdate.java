@@ -1,13 +1,15 @@
-package org.example.model.dto;
+package org.example.model;
 
-public class TimerCreate {
+import java.time.LocalDateTime;
+
+public class TimerUpdate {
     private String name;
     private int workDuration;
     private int shortBreakDuration;
     private int longBreakDuration;
     private int pomodoroCount;
 
-    public TimerCreate(String name, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
+    public TimerUpdate(String name, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
         this.name = name;
         this.workDuration = workDuration;
         this.shortBreakDuration = shortBreakDuration;
@@ -15,7 +17,7 @@ public class TimerCreate {
         this.pomodoroCount = pomodoroCount;
     }
 
-    public TimerCreate() { }
+    public TimerUpdate() { }
 
     public String getName() {
         return name;

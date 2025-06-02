@@ -1,4 +1,4 @@
-package org.example.model.dto;
+package org.example.model;
 
 public class RegisterRequest {
     private String email;

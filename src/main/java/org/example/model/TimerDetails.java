@@ -1,4 +1,4 @@
-package org.example.model.dto;
+package org.example.model;
 
 import org.example.app.TimerMode;
 import org.example.utils.Utils;

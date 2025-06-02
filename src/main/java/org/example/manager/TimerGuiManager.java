@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import org.example.controller.TimerController;
-import org.example.model.dto.TimerDetails;
+import org.example.model.TimerDetails;
 import org.example.app.StartPause;
 import org.example.app.TimerMode;
 
