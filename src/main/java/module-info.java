@@ -17,4 +17,6 @@ module org.example {
     exports org.example.ui to javafx.graphics;
     exports org.example.controller to javafx.graphics;
     opens org.example.controller to javafx.fxml;
+    exports org.example.manager to javafx.graphics;
+    opens org.example.manager to javafx.fxml;
 }

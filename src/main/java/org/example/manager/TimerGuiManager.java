@@ -1,10 +1,12 @@
-package org.example.ui;
+package org.example.manager;
 
 import javafx.application.Platform;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import org.example.controller.TimerController;
 import org.example.model.dto.TimerDetails;
+import org.example.ui.StartPause;
+import org.example.ui.TimerMode;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;

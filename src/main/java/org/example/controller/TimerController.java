@@ -5,8 +5,8 @@ import javafx.scene.control.*;
 import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
 import org.example.model.service.TimerService;
-import org.example.ui.TimerGuiManager;
-import org.example.ui.TimerListManager;
+import org.example.manager.TimerGuiManager;
+import org.example.manager.TimerListManager;
 
 public class TimerController {
 

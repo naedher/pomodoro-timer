@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.manager;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

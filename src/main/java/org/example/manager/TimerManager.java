@@ -1,9 +1,10 @@
-package org.example.ui;
+package org.example.manager;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import org.example.model.dto.TimerDetails;
+import org.example.ui.TimerMode;
 
 public class TimerManager {
 
