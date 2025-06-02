@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.model.AppContext;
+import org.example.app.AppContext;
 import org.example.service.interfaces.TimerService;
 
 // this class handles which timerservice class is going to be used

@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.app;
 
 // AppContext singleton, the instance can be accessed from anywhere in the application
 
