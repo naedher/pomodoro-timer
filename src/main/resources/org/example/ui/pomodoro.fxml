@@ -35,7 +35,7 @@
             <padding>
                 <Insets bottom="40" left="40" right="40" top="40" />
             </padding>
-            <Label styleClass="header-title" text="POMODORO DESKTOP TIMER">
+            <Label styleClass="header-title" text="OMFEM!">
                 <font>
                     <Font size="29.0" />
                 </font>
