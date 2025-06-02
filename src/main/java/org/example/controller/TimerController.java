@@ -1,10 +1,12 @@
-package org.example.ui;
+package org.example.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerDetails;
 import org.example.model.service.TimerService;
+import org.example.ui.TimerGuiManager;
+import org.example.ui.TimerListManager;
 
 public class TimerController {
 

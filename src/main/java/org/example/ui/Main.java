@@ -5,6 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.example.controller.LoginController;
+import org.example.controller.RegisterController;
+
 import java.io.IOException;
 
 public class Main extends Application {

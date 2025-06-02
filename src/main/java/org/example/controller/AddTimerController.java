@@ -1,17 +1,14 @@
-package org.example.ui;
+package org.example.controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.model.AppContext;
 import org.example.model.TimerServiceFactory;
 import org.example.model.dto.TimerCreate;
 import org.example.model.service.TimerService;
-import org.example.model.service.impl.RemoteTimerService;
 
 import java.util.concurrent.ExecutionException;
 

@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import java.net.URL?>
-<BorderPane styleClass="register-container" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.RegisterController">
+<BorderPane styleClass="register-container" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.RegisterController">
     <stylesheets>
         <URL value="@../style.css" />
     </stylesheets>

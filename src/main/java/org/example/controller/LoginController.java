@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Platform;
@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import org.example.model.AppContext;
 import org.example.model.dto.AuthRequest;
 import org.example.model.service.impl.AuthServiceImpl;
+import org.example.ui.Main;
 
 import java.util.concurrent.CompletableFuture;
 

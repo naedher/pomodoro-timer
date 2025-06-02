@@ -3,6 +3,7 @@ package org.example.ui;
 import javafx.application.Platform;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import org.example.controller.TimerController;
 import org.example.model.dto.TimerDetails;
 
 import javax.sound.sampled.*;
