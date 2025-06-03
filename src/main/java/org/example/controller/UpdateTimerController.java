@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -51,6 +52,7 @@ public class UpdateTimerController {
 
     private void handleSave() {
         TimerUpdate req = new TimerUpdate(
+                original.getId(),
                 nameField.getText(),
                 workSpinner.getValue(),
                 shortBreakSpinner.getValue(),
@@ -58,9 +60,10 @@ public class UpdateTimerController {
                 intervalSpinner.getValue()
         );
         timerService.updateTimer(original.getId(), req)
-                .thenRun(() -> stage.close())
+                .thenRun(() -> Platform.runLater(stage::close))
                 .exceptionally(ex -> {
-                    Utils.showAlert("Update error", ex.getCause().getMessage());
+                    Platform.runLater(() ->
+                            Utils.showAlert("Update error", ex.getCause().getMessage()));
                     return null;
                 });
     }

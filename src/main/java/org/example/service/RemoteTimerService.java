@@ -69,20 +69,16 @@ public class RemoteTimerService implements TimerService {
     }
 
     @Override
-    public CompletableFuture<TimerDetails> updateTimer(long id, TimerUpdate request) {
-        String jsonBody;
-        try {
-            jsonBody = mapper.writeValueAsString(request);
-        } catch (JsonProcessingException e) {
-            return CompletableFuture.failedFuture(e);
-        }
-        return apiClient.put("/timers/" + id, jsonBody)
-                .thenApply(response -> {
-                    try {
-                        return mapper.readValue(response, TimerDetails.class);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
+    public CompletableFuture<TimerDetails> updateTimer(long id, TimerUpdate req) {
+        String json;
+        try { json = mapper.writeValueAsString(req); }
+        catch (JsonProcessingException e) { return CompletableFuture.failedFuture(e); }
+
+        return apiClient.put("/timers/" + id, json)
+                .thenApply(body -> {
+                    if (body == null || body.isBlank()) return null;
+                    try { return mapper.readValue(body, TimerDetails.class); }
+                    catch (JsonProcessingException e) { throw new RuntimeException(e); }
                 });
     }
 
