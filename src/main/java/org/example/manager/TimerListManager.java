@@ -54,7 +54,7 @@ public class TimerListManager {
         updateTimerList();
     }
 
-    protected void updateTimerList() {
+    public void updateTimerList() {
         timerService.getUserTimers()
                 .thenAccept(list -> Platform.runLater(() -> timerController.getTimerListView().setItems(
                         FXCollections.observableArrayList(list))))
@@ -72,6 +72,7 @@ public class TimerListManager {
                 timerGuiManager.reset();
             }
             timerGuiManager.update();
+           updateTimerList();
         });
     }
 }

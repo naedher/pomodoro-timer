@@ -3,20 +3,22 @@ package org.example.model;
 import java.time.LocalDateTime;
 
 public class TimerUpdate {
+    private Long   id;
     private String name;
     private int workDuration;
     private int shortBreakDuration;
     private int longBreakDuration;
     private int pomodoroCount;
 
-    public TimerUpdate(String name, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
+    public TimerUpdate(Long id,String name, int workDuration, int shortBreakDuration, int longBreakDuration, int pomodoroCount) {
+        this.id = id;
         this.name = name;
         this.workDuration = workDuration;
         this.shortBreakDuration = shortBreakDuration;
         this.longBreakDuration = longBreakDuration;
         this.pomodoroCount = pomodoroCount;
     }
-
+    public Long getId() { return id; }
     public TimerUpdate() { }
 
     public String getName() {
