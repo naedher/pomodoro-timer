@@ -39,14 +39,14 @@ public class TimerController {
         // Create TimerService
         // instantiating TimerService here for compatibility with future features.
         // we simply get factory class here, it chooses which logic will work.
-        TimerService timerService = TimerServiceFactory.get();
+
 
         // Create TimerGui
         this.timerGuiManager = new TimerGuiManager(this);
 
         // Create ListManager
         this.listManager = new TimerListManager(this, timerService, timerGuiManager);
-        this.listManager = new TimerListManager(this, timerService, timerGuiManager);
+
         addContextMenu();
     }
     private void addContextMenu() {

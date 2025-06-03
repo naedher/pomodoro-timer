@@ -71,6 +71,7 @@ public class TimerListManager {
                 timerGuiManager.reset();
             }
             timerGuiManager.update();
+           updateTimerList();
         });
     }
 }
