@@ -1,0 +1,51 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Set up JavaFX
+        run: |
+          curl -L -o javafx.zip https://download2.gluonhq.com/openjfx/21.0.1/openjfx-21.0.1_windows-x64_bin-sdk.zip
+          unzip javafx.zip -d ${{ github.workspace }}\javafx-sdk
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Run jpackage
+        run: |
+          jpackage `
+            --type exe `
+            --input target `
+            --dest dist `
+            --name PomodoroDesktopTimer `
+            --main-jar pomodoro-timer.jar `
+            --main-class org.example.app.Main `
+            --icon src\main\resources\icon\icon.ico `
+            --win-shortcut `
+            --win-dir-chooser `
+            --win-menu `
+            --module-path "${{ github.workspace }}\javafx-sdk\javafx-sdk-21.0.1\lib" `
+            --add-modules javafx.controls,javafx.fxml
+
+      - name: Upload Release Artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
