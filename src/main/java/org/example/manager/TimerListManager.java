@@ -28,6 +28,7 @@ public class TimerListManager {
         this.timerGuiManager = timerGuiManager;
 
         initListListener();
+        updateTimerList();
     }
 
     public void addSavedTimer() {
