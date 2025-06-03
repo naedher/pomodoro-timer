@@ -88,7 +88,6 @@ public class RemoteTimerService implements TimerService {
 
     @Override
     public CompletableFuture<Void> deleteTimer(long id) {
-        apiClient.delete("/timers/" + id);
-        return CompletableFuture.completedFuture(null);
+        return apiClient.delete("/timers/" + id);
     }
 }
