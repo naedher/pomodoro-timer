@@ -31,14 +31,11 @@ public class TimerController {
 
     private TimerGuiManager timerGuiManager;
     private TimerListManager listManager;
+    // we simply get factory class here, it chooses which logic will work.
     private final TimerService timerService = TimerServiceFactory.get();
 
     @FXML
     public void initialize() {
-
-        // Create TimerService
-        // instantiating TimerService here for compatibility with future features.
-        // we simply get factory class here, it chooses which logic will work.
 
 
         // Create TimerGui
