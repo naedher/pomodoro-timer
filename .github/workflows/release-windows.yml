@@ -36,7 +36,6 @@ jobs:
             --name PomodoroDesktopTimer `
             --main-jar pomodoro-timer.jar `
             --main-class org.example.app.Main `
-            --icon src\main\resources\icon\icon.ico `
             --win-shortcut `
             --win-dir-chooser `
             --win-menu `
