@@ -38,7 +38,7 @@ public class TimerManager {
         if (timeLeft <= 0) {
             onComplete();
         } else {
-            timerGuiManager.updateDisplay(timeLeft);
+            timerGuiManager.updateTimeDisplay(timeLeft);
         }
     }
 
@@ -49,7 +49,7 @@ public class TimerManager {
         nextInterval();
         reset();
         start();
-        timerGuiManager.update();
+        timerGuiManager.updateDisplay();
     }
 
     // Method to handle timer completion
@@ -61,7 +61,7 @@ public class TimerManager {
 
         currentInterval++;
         if (currentInterval > selectedTimer.getPomodoroCount()) {
-            currentInterval = 1;
+            resetInterval();
             currentMode = TimerMode.LONG_BREAK;
         } else {
             currentMode = TimerMode.SHORT_BREAK;
@@ -102,5 +102,8 @@ public class TimerManager {
         return selectedTimer.getPomodoroCount();
     }
 
+    public void resetInterval() {
+        currentInterval = 1;
+    }
 }
 

@@ -83,7 +83,7 @@ public class TimerController {
     // Method to reset the timer
     @FXML
     private void reset() {
-        timerGuiManager.reset();
+        timerGuiManager.resetIntervalAndTime();
     }
 
     // Method to handle debug button action
