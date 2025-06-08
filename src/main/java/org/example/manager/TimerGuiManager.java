@@ -33,7 +33,7 @@ public class TimerGuiManager {
         this.modeMapping = initModeMapping();
         initModeGroup();
 
-        update();
+        updateDisplay();
     }
 
     private Map<ToggleButton, TimerMode> initModeMapping() {
@@ -67,7 +67,7 @@ public class TimerGuiManager {
     private void handleModeButton(ToggleButton button) {
         TimerMode mode = modeMapping.get(button);
         timerManager.setMode(mode);
-        reset();
+        resetTime();
         setStartButtonText(StartPause.START);
     }
 
@@ -93,24 +93,30 @@ public class TimerGuiManager {
         setStartButtonText(StartPause.START);
     }
 
-    public void reset() {
+    public void resetTime() {
         stop();
         timerManager.reset();
+        updateTimeDisplay();
+    }
+
+    public void resetIntervalAndTime() {
+        timerManager.resetInterval();
+        resetTime();
         updateDisplay();
     }
 
-    public void update() {
+    public void updateDisplay() {
         updateIntervalDisplay();
-        updateDisplay();
+        updateTimeDisplay();
     }
 
-    private void updateDisplay() {
+    private void updateTimeDisplay() {
         int timeLeft = timerManager.getTimeLeft();
-        updateDisplay(timeLeft);
+        updateTimeDisplay(timeLeft);
     }
 
     // Method to update the timer display
-    public void updateDisplay(int timeLeft) {
+    public void updateTimeDisplay(int timeLeft) {
         int minutes = timeLeft / 60;
         int seconds = timeLeft % 60;
         timerController.setTimerLabelText(String.format("%02d:%02d", minutes, seconds));
@@ -158,6 +164,6 @@ public class TimerGuiManager {
 
     public void debug() {
         timerManager.setTimeLeft(3);
-        updateDisplay();
+        updateTimeDisplay();
     }
 }

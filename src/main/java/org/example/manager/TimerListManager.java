@@ -69,9 +69,9 @@ public class TimerListManager {
         timerController.getTimerListView().getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 timerGuiManager.setSelectedTimer(newVal);
-                timerGuiManager.reset();
+                timerGuiManager.resetIntervalAndTime();
             }
-            timerGuiManager.update();
+            timerGuiManager.updateDisplay();
            updateTimerList();
         });
     }
